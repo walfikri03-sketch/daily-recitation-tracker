@@ -1,0 +1,12 @@
+# Local backups
+*.bak*
+
+# Spreadsheets and exports
+*.csv
+*.xlsx
+
+# macOS
+.DS_Store
+
+# Private data and unpublished material
+private/

@@ -1,0 +1,431 @@
+{
+  "meta": {
+    "app": "Daily Recitation",
+    "source": {
+      "file": "Hafizlik_Takip_Tablosu_November_2026.xlsx",
+      "sheet": "Hafızlık Takip",
+      "sheetsInWorkbook": [
+        "Hafızlık Takip",
+        "Attendance",
+        "Weekly Call",
+        "Grafik"
+      ]
+    },
+    "parsedAt": "2026-11-09T15:33:28+05:00",
+    "cellMapping": {
+      "✓": "done",
+      "~": "progress",
+      "empty": "todo"
+    },
+    "skippedColumns": [
+      "2",
+      "3",
+      "(blank)"
+    ],
+    "notes": [
+      "Tamamlanan is a computed column and is not a unit.",
+      "All unit cells were empty in this workbook; every unit starts as todo.",
+      "Step 6: unit list replaced. AL-FIIL removed; AL BAYYINAH and AL ALAQ added with new ids (al-bayyinah-v2, al-alaq-v2) so progress saved under the old 'Al BAYNIYYAH' / 'AL ALAQ' ids cannot resurface. All other ids are unchanged."
+    ]
+  },
+  "units": [
+    {
+      "id": "al-bayyinah-v2",
+      "label": "AL BAYYINAH"
+    },
+    {
+      "id": "al-alaq-v2",
+      "label": "AL ALAQ"
+    },
+    {
+      "id": "Yasin 1 sayfa",
+      "label": "Yasin 1 sayfa",
+      "table": 1
+    },
+    {
+      "id": "Yasin 2 sayfa",
+      "label": "Yasin 2 sayfa",
+      "table": 1
+    },
+    {
+      "id": "Yasin 3 sayfa",
+      "label": "Yasin 3 sayfa",
+      "table": 1
+    },
+    {
+      "id": "Yasin 4 sayfa",
+      "label": "Yasin 4 sayfa",
+      "table": 1
+    },
+    {
+      "id": "Yasin 5 sayfa",
+      "label": "Yasin 5 sayfa",
+      "table": 1
+    },
+    {
+      "id": "Yasin 6 sayfa",
+      "label": "Yasin 6 sayfa",
+      "table": 1
+    },
+    {
+      "id": "AL MULK",
+      "label": "AL MULK",
+      "table": 1
+    },
+    {
+      "id": "AN NABA",
+      "label": "AN NABA",
+      "table": 2
+    },
+    {
+      "id": "AL BALAD",
+      "label": "AL BALAD",
+      "table": 2
+    },
+    {
+      "id": "AL FAJR",
+      "label": "AL FAJR",
+      "table": 2
+    },
+    {
+      "id": "ASH SHAMS",
+      "label": "ASH SHAMS",
+      "table": 2
+    },
+    {
+      "id": "AL LAYL",
+      "label": "AL LAYL",
+      "table": 2
+    },
+    {
+      "id": "AL GHASHIYAH",
+      "label": "AL GHASHIYAH",
+      "table": 2
+    },
+    {
+      "id": "AL A'LA",
+      "label": "AL A'LA",
+      "table": 2
+    }
+  ],
+  "students": [
+    {
+      "id": 1,
+      "name": "Student 1",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 5
+        },
+        {
+          "table": 2,
+          "row": 22
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Student 2",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 6
+        },
+        {
+          "table": 2,
+          "row": 23
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Student 3",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 7
+        },
+        {
+          "table": 2,
+          "row": 24
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Student 4",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 8
+        },
+        {
+          "table": 2,
+          "row": 25
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Student 5",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 9
+        },
+        {
+          "table": 2,
+          "row": 26
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Student 6",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 10
+        },
+        {
+          "table": 2,
+          "row": 27
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Student 7",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 11
+        },
+        {
+          "table": 2,
+          "row": 28
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Student 8",
+      "units": {
+        "al-bayyinah-v2": "todo",
+        "al-alaq-v2": "todo",
+        "Yasin 1 sayfa": "todo",
+        "Yasin 2 sayfa": "todo",
+        "Yasin 3 sayfa": "todo",
+        "Yasin 4 sayfa": "todo",
+        "Yasin 5 sayfa": "todo",
+        "Yasin 6 sayfa": "todo",
+        "AL MULK": "todo",
+        "AN NABA": "todo",
+        "AL BALAD": "todo",
+        "AL FAJR": "todo",
+        "ASH SHAMS": "todo",
+        "AL LAYL": "todo",
+        "AL GHASHIYAH": "todo",
+        "AL A'LA": "todo"
+      },
+      "sheetRows": [
+        {
+          "table": 1,
+          "row": 12
+        },
+        {
+          "table": 2,
+          "row": 29
+        }
+      ]
+    }
+  ],
+  "ignoredRows": [
+    {
+      "table": 1,
+      "sheetRow": 13,
+      "number": "10",
+      "reason": "number without name"
+    },
+    {
+      "table": 1,
+      "sheetRow": 14,
+      "number": "4",
+      "reason": "number without name"
+    },
+    {
+      "table": 1,
+      "sheetRow": 15,
+      "number": "6",
+      "reason": "number without name"
+    },
+    {
+      "table": 1,
+      "sheetRow": 16,
+      "number": "9",
+      "reason": "number without name"
+    },
+    {
+      "table": 2,
+      "sheetRow": 30,
+      "number": "8",
+      "reason": "number without name"
+    },
+    {
+      "table": 2,
+      "sheetRow": 31,
+      "number": "10",
+      "reason": "number without name"
+    },
+    {
+      "table": 2,
+      "sheetRow": 32,
+      "number": "11",
+      "reason": "number without name"
+    },
+    {
+      "table": 2,
+      "sheetRow": 33,
+      "number": "9",
+      "reason": "number without name"
+    }
+  ],
+  "strayCells": [
+    {
+      "cell": "E36",
+      "value": "z"
+    }
+  ],
+  "counts": {
+    "students": 8,
+    "units": 16,
+    "cells": 128,
+    "todo": 128
+  }
+}

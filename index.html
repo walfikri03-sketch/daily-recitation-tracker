@@ -1,0 +1,2592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#edf0f8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Daily Recitation">
+<title>Today · Daily Recitation</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2311162c'/%3E%3Cpath d='M9 9h6.5c1.4 0 2.5 1.1 2.5 2.5V24c0-1.4-1.1-2.5-2.5-2.5H9zm14 0h-2c-1.4 0-2.5 1.1-2.5 2.5V24c0-1.4 1.1-2.5 2.5-2.5h2z' fill='%23e8a17f'/%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #edf0f8;
+    --surface: #ffffff;
+    --ink: #10162c;
+    --ink-2: #4f5872;
+    --muted: #626b80;
+    --line: rgba(16, 22, 44, 0.075);
+    --crimson: #b1123b;
+    --peach: #e8a17f;
+    --navy: #11182f;
+    --radius-card: 26px;
+    --tap: 44px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  [hidden] { display: none !important; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    background:
+      radial-gradient(120% 40% at 50% -8%, #fcfdff 0%, rgba(252, 253, 255, 0) 62%),
+      var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  button:focus-visible {
+    outline: 2.5px solid #3b4bd8;
+    outline-offset: 2px;
+  }
+
+  .app {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: calc(18px + var(--safe-top)) 18px calc(104px + var(--safe-bottom));
+  }
+
+  /* ---------- Header ---------- */
+
+  .page-head { padding: 6px 2px 22px; }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    font-size: 10.5px;
+    font-weight: 750;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+
+  .today-date {
+    margin: 8px 0 0;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  .warning {
+    margin: 0 0 14px;
+    padding: 11px 13px;
+    border-radius: 14px;
+    border: 1px solid rgba(170, 112, 36, 0.22);
+    background: #fff5e9;
+    color: #7a4a12;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  /* ---------- Cards ---------- */
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    box-shadow:
+      0 1px 1px rgba(16, 22, 44, 0.035),
+      0 18px 40px -28px rgba(16, 22, 44, 0.38);
+  }
+
+  .card-label {
+    margin: 0;
+    font-size: 10.5px;
+    font-weight: 750;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Today summary ---------- */
+
+  .summary { padding: 18px 18px 16px; }
+
+  .summary-body {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 13px;
+  }
+
+  .donut {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(98px, 27vw, 108px);
+    aspect-ratio: 1;
+  }
+
+  .donut svg { display: block; width: 100%; height: 100%; }
+
+  .donut-track {
+    fill: none;
+    stroke: #eef1f7;
+    stroke-width: 15;
+  }
+
+  .donut-seg {
+    fill: none;
+    stroke-width: 15;
+    stroke-linecap: butt;
+    stroke-dasharray: 0 100;
+    transition:
+      stroke-dasharray 0.55s cubic-bezier(0.22, 0.8, 0.24, 1),
+      stroke-dashoffset 0.55s cubic-bezier(0.22, 0.8, 0.24, 1),
+      opacity 0.2s ease;
+  }
+
+  .seg-done { stroke: var(--crimson); }
+  .seg-progress { stroke: var(--peach); }
+  .seg-todo { stroke: #dfe4ef; }
+
+  .donut-center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .donut-center span {
+    display: block;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .donut-center small {
+    display: block;
+    margin-top: 4px;
+    font-size: 8.5px;
+    font-weight: 750;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .legend {
+    flex: 1 1 auto;
+    min-width: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 33px;
+    border-bottom: 1px solid rgba(16, 22, 44, 0.055);
+  }
+
+  .legend-row:last-child { border-bottom: 0; }
+
+  .dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #c6ccda;
+  }
+
+  .legend-row[data-kind="done"] .dot { background: var(--crimson); }
+  .legend-row[data-kind="progress"] .dot { background: var(--peach); }
+
+  .legend-label {
+    font-size: 12.5px;
+    font-weight: 550;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .legend-count {
+    margin-left: auto;
+    font-size: 15.5px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .summary-foot {
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid rgba(16, 22, 44, 0.055);
+    font-size: 11.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .summary-foot[hidden] { display: none; }
+
+  /* ---------- Class progress ---------- */
+
+  .progress-card {
+    margin-top: 12px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-radius: var(--radius-card);
+    background:
+      radial-gradient(130% 170% at 100% -10%, rgba(232, 161, 127, 0.24) 0%, rgba(232, 161, 127, 0) 56%),
+      linear-gradient(155deg, #1a2140 0%, #0f1529 100%);
+    color: #fff;
+    box-shadow: 0 20px 38px -24px rgba(15, 21, 41, 0.9);
+  }
+
+  .progress-card .card-label { color: rgba(255, 255, 255, 0.5); }
+
+  .progress-value {
+    margin: 9px 0 0;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-of {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .progress-sub {
+    margin: 7px 0 0;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.56);
+  }
+
+  .mini-donut {
+    position: relative;
+    flex: none;
+    width: 58px;
+    height: 58px;
+  }
+
+  .mini-donut svg { display: block; width: 100%; height: 100%; }
+
+  .mini-track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.13);
+    stroke-width: 6;
+  }
+
+  .mini-ring {
+    fill: none;
+    stroke: url(#ringGradient);
+    stroke-width: 6;
+    stroke-linecap: butt;
+    stroke-dasharray: 0 100;
+    transition: stroke-dasharray 0.55s cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+
+  .mini-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+  }
+
+  /* ---------- Last 7 days ---------- */
+
+  .week-card {
+    margin-top: 12px;
+    padding: 18px 18px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    box-shadow:
+      0 1px 1px rgba(16, 22, 44, 0.035),
+      0 18px 40px -28px rgba(16, 22, 44, 0.38);
+  }
+
+  .week-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .week-range {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .week-chart {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    align-items: end;
+    margin-top: 16px;
+  }
+
+  .week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .week-bar {
+    width: 100%;
+    height: 76px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+  }
+
+  .week-seg {
+    width: 100%;
+    border-radius: 3px;
+    transition: height 0.35s cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+
+  .week-seg.done { background: var(--crimson); }
+  .week-seg.progress { background: var(--peach); }
+  .week-seg.todo { background: #dfe4ef; }
+
+  .week-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .week-day.is-today .week-label { color: var(--ink); }
+
+  .week-empty {
+    margin: 14px 0 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .week-legend {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .week-legend li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .week-legend .dot { width: 6px; height: 6px; }
+  .week-legend .dot.done { background: var(--crimson); }
+  .week-legend .dot.progress { background: var(--peach); }
+
+  /* ---------- Student list ---------- */
+
+  .list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 26px 2px 0;
+  }
+
+  .list-head h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+  }
+
+  .count-chip {
+    min-width: 25px;
+    height: 25px;
+    padding: 0 9px;
+    border-radius: 13px;
+    border: 1px solid var(--line);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hint {
+    margin: 5px 2px 13px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .students {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .student {
+    position: relative;
+    padding: 14px 14px 12px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: #fff;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .student::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 17px;
+    bottom: 17px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: transparent;
+    transition: background-color 0.18s ease;
+  }
+
+  .student[data-status="done"] {
+    border-color: rgba(177, 18, 59, 0.2);
+    background: linear-gradient(180deg, #ffffff 0%, #fff7f9 100%);
+    box-shadow: 0 10px 26px -22px rgba(177, 18, 59, 0.7);
+  }
+
+  .student[data-status="progress"] {
+    border-color: rgba(232, 161, 127, 0.4);
+    background: linear-gradient(180deg, #ffffff 0%, #fff9f5 100%);
+  }
+
+  .student[data-status="done"]::before { background: var(--crimson); }
+  .student[data-status="progress"]::before { background: var(--peach); }
+
+  .student-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .who {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .name {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.005em;
+    overflow-wrap: anywhere;
+  }
+
+  .unit-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 5px;
+    min-width: 0;
+  }
+
+  .unit-tag {
+    flex: none;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background: #f1f3f9;
+    color: var(--muted);
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .student[data-status="done"] .unit-tag {
+    background: rgba(177, 18, 59, 0.08);
+    color: var(--crimson);
+  }
+
+  .student[data-status="progress"] .unit-tag {
+    background: rgba(232, 161, 127, 0.18);
+    color: #8a4a28;
+  }
+
+  .unit {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .tally {
+    flex: none;
+    padding-top: 2px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: 550;
+    line-height: 1.3;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tally b {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 11px;
+    padding: 3px;
+    border-radius: 13px;
+    background: #f1f3f9;
+  }
+
+  .choices[hidden] { display: none; }
+
+  .choice {
+    min-height: var(--tap);
+    padding: 0 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #6f7891;
+    font-size: 12.5px;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .choice[aria-pressed="true"] {
+    background: #fff;
+    color: var(--ink);
+    box-shadow:
+      0 1px 4px rgba(16, 22, 44, 0.12),
+      0 0 0 1px rgba(16, 22, 44, 0.04);
+  }
+
+  .choice[data-status="done"][aria-pressed="true"] {
+    background: var(--crimson);
+    color: #fff;
+    box-shadow: 0 6px 14px -6px rgba(177, 18, 59, 0.7);
+  }
+
+  .choice[data-status="progress"][aria-pressed="true"] {
+    background: #f6d8c6;
+    color: #763a1d;
+    box-shadow: none;
+  }
+
+  .choice:active { transform: scale(0.985); }
+
+  @media (hover: hover) {
+    .choice:not([aria-pressed="true"]):hover {
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+    }
+  }
+
+
+  /* ---------- Students roster ---------- */
+
+  .roster {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .roster-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 0 12px;
+    padding: 15px 16px 14px;
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(16, 22, 44, 0.03);
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.12s ease;
+  }
+
+  .roster-row:active { transform: scale(0.995); }
+
+  @media (hover: hover) {
+    .roster-row:hover {
+      border-color: rgba(16, 22, 44, 0.16);
+      box-shadow: 0 12px 26px -22px rgba(16, 22, 44, 0.55);
+    }
+  }
+
+  .roster-main { min-width: 0; }
+
+  .roster-name {
+    display: block;
+    font-size: 15.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.005em;
+    overflow-wrap: anywhere;
+  }
+
+  .roster-next {
+    display: block;
+    margin-top: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .roster-side {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 1px;
+  }
+
+  .roster-count {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .roster-count b {
+    display: block;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.2;
+    color: var(--ink-2);
+  }
+
+  .roster-count span {
+    display: block;
+    margin-top: 2px;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .chev {
+    width: 8px;
+    height: 8px;
+    margin: 5px 2px 0 1px;
+    flex: none;
+    border-top: 1.6px solid #aab1c3;
+    border-right: 1.6px solid #aab1c3;
+    transform: rotate(45deg);
+  }
+
+  .roster-meter {
+    grid-column: 1 / -1;
+    margin-top: 11px;
+  }
+
+  .meter {
+    height: 4px;
+    border-radius: 999px;
+    background: #eef1f7;
+    overflow: hidden;
+  }
+
+  .meter > span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--crimson) 0%, #d84065 100%);
+    transition: width 0.35s cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+
+  /* ---------- Student detail ---------- */
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    min-height: var(--tap);
+    margin: 0 0 2px -2px;
+    padding: 0 10px 0 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  .back-link svg {
+    display: block;
+    width: 19px;
+    height: 19px;
+  }
+
+  .detail-head { padding: 2px 2px 0; }
+
+  .detail-name {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+
+  .detail-name:focus { outline: none; }
+
+  .detail-meta {
+    margin: 9px 0 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .detail-meter { height: 6px; margin: 12px 2px 0; background: #dde3ee; }
+
+  .unit-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 16px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: 0 1px 2px rgba(16, 22, 44, 0.03);
+  }
+
+  .unit-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(16, 22, 44, 0.06);
+  }
+
+  .unit-item:last-child { border-bottom: 0; }
+
+  .unit-name-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    padding: 1px 1px 0;
+  }
+
+  .unit-name {
+    font-size: 13.5px;
+    font-weight: 650;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .unit-flag {
+    flex: none;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background: rgba(177, 18, 59, 0.08);
+    color: var(--crimson);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .unit-item .choices { margin-top: 8px; }
+
+
+  /* ---------- Progress ---------- */
+
+  .class-total {
+    padding: 20px;
+    border-radius: var(--radius-card);
+    color: #fff;
+    background:
+      radial-gradient(130% 170% at 100% -10%, rgba(232, 161, 127, 0.24) 0%, rgba(232, 161, 127, 0) 56%),
+      linear-gradient(155deg, #1a2140 0%, #0f1529 100%);
+    box-shadow: 0 20px 38px -24px rgba(15, 21, 41, 0.9);
+  }
+
+  .class-total .card-label { color: rgba(255, 255, 255, 0.5); }
+
+  .class-total-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .class-total-pct {
+    font-size: 38px;
+    line-height: 0.9;
+    font-weight: 750;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .class-total-sub {
+    margin: 12px 0 0;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .class-total-sub span {
+    color: #fff;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .class-total-meter {
+    height: 8px;
+    margin-top: 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+  }
+
+  .class-total-meter > span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f2b999 0%, #e05576 100%);
+    transition: width 0.4s cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+
+  .class-total-stats {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .class-total-stats li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+  }
+
+  .class-total-stats b {
+    margin-left: auto;
+    font-size: 12.5px;
+    font-weight: 750;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .class-total-stats .dot { width: 6px; height: 6px; }
+  .class-total-stats .dot.done { background: #f0718e; }
+  .class-total-stats .dot.progress { background: #f2b999; }
+  .class-total-stats .dot.todo { background: rgba(255, 255, 255, 0.32); }
+
+  .progress-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .copy-csv {
+    flex: none;
+    min-width: 106px;
+    min-height: var(--tap);
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 12.5px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px -4px rgba(16, 22, 44, 0.15);
+    transition: transform 0.12s ease, border-color 0.16s ease;
+  }
+
+  .copy-csv svg {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    color: var(--crimson);
+  }
+
+  .copy-csv:active { transform: scale(0.99); }
+
+  @media (hover: hover) {
+    .copy-csv:hover { border-color: rgba(16, 22, 44, 0.16); }
+  }
+
+  .copy-status {
+    min-height: 16px;
+    margin: 6px 2px 0;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  .copy-status.is-error { color: #9a5a2a; }
+
+  .progress-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: 0 1px 2px rgba(16, 22, 44, 0.03);
+  }
+
+  .progress-row {
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(16, 22, 44, 0.06);
+  }
+
+  .progress-row:last-child { border-bottom: 0; }
+
+  .progress-row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .progress-name {
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .progress-count {
+    flex: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-meter { height: 5px; margin-top: 9px; }
+
+  /* ---------- Bottom navigation ---------- */
+
+  .tabbar {
+    position: fixed;
+    z-index: 30;
+    left: 50%;
+    bottom: calc(10px + var(--safe-bottom));
+    transform: translateX(-50%);
+    width: min(calc(100% - 24px), 402px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 29px;
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    backdrop-filter: blur(22px) saturate(180%);
+    box-shadow: 0 14px 34px -14px rgba(16, 22, 44, 0.38);
+  }
+
+  .tab {
+    min-height: 56px;
+    padding: 0;
+    border: 0;
+    border-radius: 23px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 10.5px;
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .tab svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .tab.is-active {
+    background: var(--navy);
+    color: #fff;
+    box-shadow: 0 10px 20px -10px rgba(17, 24, 47, 0.85);
+  }
+
+
+  /* ---------- CSV fallback sheet ---------- */
+
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 15, 30, 0.42);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  .sheet-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    max-height: 82vh;
+    max-height: 82svh;
+    overflow-y: auto;
+    padding: 18px 18px calc(18px + var(--safe-bottom));
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 40px rgba(10, 15, 30, 0.25);
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .sheet-head h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .sheet-close {
+    min-height: var(--tap);
+    padding: 0 14px;
+    border: 0;
+    border-radius: 12px;
+    background: #f1f3f9;
+    color: var(--ink-2);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .sheet-copy {
+    margin: 8px 0 10px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .sheet-text {
+    width: 100%;
+    height: 240px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #f8f9fc;
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.45;
+    resize: none;
+    white-space: pre;
+    overflow: auto;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  body.sheet-open { overflow: hidden; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <p class="warning" id="storageWarning" hidden>
+    This browser won’t let the app save data, so changes will disappear when you close the tab.
+    </p>
+    <main id="appMain">
+      <div class="view" id="todayView">
+<header class="page-head">
+      <p class="eyebrow">Daily Recitation</p>
+      <h1 id="todayHeading">Today</h1>
+      <p class="today-date" id="todayDate">—</p>
+    </header>
+
+      
+
+      <section class="card summary" aria-labelledby="summaryTitle">
+        <h2 class="card-label" id="summaryTitle">Today’s submissions</h2>
+        <div class="summary-body">
+          <div class="donut" id="donut" role="img" aria-label="No submissions yet">
+            <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <circle class="donut-track" cx="60" cy="60" r="48" pathLength="100"></circle>
+              <g transform="rotate(-90 60 60)">
+                <circle class="donut-seg seg-done" id="segDone" cx="60" cy="60" r="48" pathLength="100"></circle>
+                <circle class="donut-seg seg-progress" id="segProgress" cx="60" cy="60" r="48" pathLength="100"></circle>
+                <circle class="donut-seg seg-todo" id="segTodo" cx="60" cy="60" r="48" pathLength="100"></circle>
+              </g>
+            </svg>
+            <div class="donut-center" aria-hidden="true">
+              <span id="donePct">0%</span>
+              <small>done</small>
+            </div>
+          </div>
+
+          <ul class="legend">
+            <li class="legend-row" data-kind="done">
+              <span class="dot"></span>
+              <span class="legend-label">Done</span>
+              <b class="legend-count" id="countDone">0</b>
+            </li>
+            <li class="legend-row" data-kind="progress">
+              <span class="dot"></span>
+              <span class="legend-label">In progress</span>
+              <b class="legend-count" id="countProgress">0</b>
+            </li>
+            <li class="legend-row" data-kind="todo">
+              <span class="dot"></span>
+              <span class="legend-label">Not yet</span>
+              <b class="legend-count" id="countTodo">0</b>
+            </li>
+          </ul>
+        </div>
+        <p class="summary-foot" id="summaryFoot" hidden></p>
+      </section>
+
+      <section class="progress-card" aria-labelledby="classTitle">
+        <div>
+          <h2 class="card-label" id="classTitle">Class progress</h2>
+          <p class="progress-value">
+            <span id="classDone">0</span><span class="progress-of"> / <span id="classTotal">0</span></span>
+          </p>
+          <p class="progress-sub">units complete</p>
+        </div>
+        <div class="mini-donut" aria-hidden="true">
+          <svg viewBox="0 0 64 64" focusable="false">
+            <defs>
+              <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f2b999"></stop>
+                <stop offset="1" stop-color="#d84566"></stop>
+              </linearGradient>
+            </defs>
+            <circle class="mini-track" cx="32" cy="32" r="27" pathLength="100"></circle>
+            <g transform="rotate(-90 32 32)">
+              <circle class="mini-ring" id="classRing" cx="32" cy="32" r="27" pathLength="100"></circle>
+            </g>
+          </svg>
+          <span class="mini-label" id="classPct">0%</span>
+        </div>
+      </section>
+
+      <section class="week-card" aria-labelledby="weekTitle">
+        <div class="week-head">
+          <h2 class="card-label" id="weekTitle">Last 7 days</h2>
+          <span class="week-range" id="weekRange">—</span>
+        </div>
+        <div class="week-chart" id="weekChart" role="img" aria-label="No status updates recorded in the last 7 days"></div>
+        <p class="week-empty" id="weekEmpty" hidden>No status updates recorded in the last 7 days.</p>
+        <ul class="week-legend" aria-hidden="true">
+          <li><span class="dot done"></span>Done</li>
+          <li><span class="dot progress"></span>In progress</li>
+          <li><span class="dot todo"></span>Not yet</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="todayStudentsTitle">
+        <div class="list-head">
+          <h2 id="todayStudentsTitle">Students</h2>
+          <span class="count-chip" id="studentCount">0</span>
+        </div>
+        <p class="hint" id="recordHint">Tap a status to record today’s recitation. Progress is saved on this device.</p>
+        <ul class="students" id="studentList" aria-describedby="recordHint"></ul>
+      </section>
+
+      </div>
+
+      <div class="view" id="progressView" hidden>
+        <header class="page-head">
+          <p class="eyebrow">Daily Recitation</p>
+          <div class="progress-title-row">
+            <h1 id="progressHeading">Progress</h1>
+            <button class="copy-csv" type="button" id="copyCsv">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="8.5" y="8.5" width="11" height="11" rx="2"></rect>
+                <path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"></path>
+              </svg>
+              <span id="copyCsvLabel">Copy CSV</span>
+            </button>
+          </div>
+          <p class="today-date" id="progressMeta">—</p>
+          <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+        </header>
+
+        <section class="class-total" aria-labelledby="classTotalTitle">
+          <div class="class-total-head">
+            <h2 class="card-label" id="classTotalTitle">Class total</h2>
+            <span class="class-total-pct" id="progressClassPct">0%</span>
+          </div>
+          <p class="class-total-sub"><span id="progressClassDone">0</span> of <span id="progressClassTotal">0</span> units done</p>
+          <div class="class-total-meter" aria-hidden="true"><span id="progressClassBar"></span></div>
+          <ul class="class-total-stats">
+            <li><span class="dot done"></span>Done<b id="progressDoneUnits">0</b></li>
+            <li><span class="dot progress"></span>In progress<b id="progressProgressUnits">0</b></li>
+            <li><span class="dot todo"></span>Not yet<b id="progressTodoUnits">0</b></li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="studentProgressTitle">
+          <div class="list-head">
+            <h2 id="studentProgressTitle">Students</h2>
+            <span class="count-chip" id="progressStudentCount">0</span>
+          </div>
+          <p class="hint" id="progressHint">Units done for each student.</p>
+          <ul class="progress-list" id="progressList" aria-describedby="progressHint"></ul>
+        </section>
+      </div>
+
+      <div class="view" id="studentsView" hidden>
+        <div class="panel" id="studentsListPanel">
+          <header class="page-head">
+            <p class="eyebrow">Daily Recitation</p>
+            <h1 id="rosterHeading">Students</h1>
+            <p class="today-date" id="studentsMeta">—</p>
+          </header>
+          <p class="hint" id="rosterHint">Tap a student to update their overall progress.</p>
+          <ul class="roster" id="studentRoster" aria-describedby="rosterHint"></ul>
+        </div>
+
+        <div class="panel" id="studentDetailPanel" hidden>
+          <button class="back-link" type="button" id="backToStudents">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14.5 5.5 8 12l6.5 6.5"></path>
+            </svg>
+            Students
+          </button>
+
+          <header class="detail-head">
+            <h1 class="detail-name" id="detailName" tabindex="-1">—</h1>
+            <p class="detail-meta" id="detailMeta">—</p>
+            <div class="meter detail-meter" aria-hidden="true"><span id="detailMeter"></span></div>
+          </header>
+
+          <div class="list-head">
+            <h2 id="unitsHeading">Units</h2>
+            <span class="count-chip" id="unitCount">0</span>
+          </div>
+          <p class="hint" id="unitHint">Set each unit’s status. Changes save immediately.</p>
+          <ul class="unit-list" id="unitList" aria-labelledby="unitsHeading" aria-describedby="unitHint"></ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <nav class="tabbar" aria-label="Primary">
+    <button class="tab is-active" type="button" id="tabToday" aria-current="page" aria-controls="todayView">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.6v-6.2H9.6V21H5a1 1 0 0 1-1-1z"></path>
+      </svg>
+      <span>Today</span>
+    </button>
+    <button class="tab" type="button" id="tabProgress" aria-controls="progressView">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M5 20v-6.5M12 20V6.5M19 20v-9.5"></path>
+      </svg>
+      <span>Progress</span>
+    </button>
+    <button class="tab" type="button" id="tabStudents" aria-controls="studentsView">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="8" r="3.2"></circle>
+        <path d="M5.6 20c.6-3.6 3.2-5.5 6.4-5.5s5.8 1.9 6.4 5.5"></path>
+      </svg>
+      <span>Students</span>
+    </button>
+  </nav>
+  <div class="sheet" id="csvSheet" hidden>
+    <div class="sheet-backdrop" id="csvBackdrop"></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="csvSheetTitle">
+      <div class="sheet-head">
+        <h2 id="csvSheetTitle">CSV data</h2>
+        <button class="sheet-close" type="button" id="closeCsvSheet">Done</button>
+      </div>
+      <p class="sheet-copy">Select the text below and copy it. Paste into Google Sheets, then use Data → Split text to columns.</p>
+      <textarea class="sheet-text" id="csvSheetText" readonly spellcheck="false" aria-label="CSV data"></textarea>
+    </div>
+  </div>
+
+  <div class="sr-only" role="status" aria-live="polite" id="live"></div>
+  <noscript><p style="padding:0 18px;font:14px -apple-system,sans-serif;color:#7a4a12">This app needs JavaScript to work.</p></noscript>
+
+  <!-- Read-only snapshot generated from data.json (units and students, all cells start empty).
+       After first launch the browser's localStorage is the source of truth. -->
+  <script id="seed" type="application/json">{"meta":{"app":"Daily Recitation","source":{"file":"Hafizlik_Takip_Tablosu_November_2026.xlsx","sheet":"Hafızlık Takip","sheetsInWorkbook":["Hafızlık Takip","Attendance","Weekly Call","Grafik"]},"parsedAt":"2026-11-09T15:33:28+05:00","cellMapping":{"✓":"done","~":"progress","empty":"todo"},"skippedColumns":["2","3","(blank)"],"notes":["Tamamlanan is a computed column and is not a unit.","All unit cells were empty in this workbook; every unit starts as todo.","Step 6: unit list replaced. AL-FIIL removed; AL BAYYINAH and AL ALAQ added with new ids (al-bayyinah-v2, al-alaq-v2) so progress saved under the old 'Al BAYNIYYAH' / 'AL ALAQ' ids cannot resurface. All other ids are unchanged."]},"units":[{"id":"al-bayyinah-v2","label":"AL BAYYINAH"},{"id":"al-alaq-v2","label":"AL ALAQ"},{"id":"Yasin 1 sayfa","label":"Yasin 1 sayfa","table":1},{"id":"Yasin 2 sayfa","label":"Yasin 2 sayfa","table":1},{"id":"Yasin 3 sayfa","label":"Yasin 3 sayfa","table":1},{"id":"Yasin 4 sayfa","label":"Yasin 4 sayfa","table":1},{"id":"Yasin 5 sayfa","label":"Yasin 5 sayfa","table":1},{"id":"Yasin 6 sayfa","label":"Yasin 6 sayfa","table":1},{"id":"AL MULK","label":"AL MULK","table":1},{"id":"AN NABA","label":"AN NABA","table":2},{"id":"AL BALAD","label":"AL BALAD","table":2},{"id":"AL FAJR","label":"AL FAJR","table":2},{"id":"ASH SHAMS","label":"ASH SHAMS","table":2},{"id":"AL LAYL","label":"AL LAYL","table":2},{"id":"AL GHASHIYAH","label":"AL GHASHIYAH","table":2},{"id":"AL A'LA","label":"AL A'LA","table":2}],"students":[{"id":1,"name":"Student 1","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":5},{"table":2,"row":22}]},{"id":2,"name":"Student 2","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":6},{"table":2,"row":23}]},{"id":3,"name":"Student 3","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":7},{"table":2,"row":24}]},{"id":4,"name":"Student 4","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":8},{"table":2,"row":25}]},{"id":5,"name":"Student 5","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":9},{"table":2,"row":26}]},{"id":6,"name":"Student 6","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":10},{"table":2,"row":27}]},{"id":7,"name":"Student 7","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":11},{"table":2,"row":28}]},{"id":8,"name":"Student 8","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":12},{"table":2,"row":29}]}],"ignoredRows":[{"table":1,"sheetRow":13,"number":"10","reason":"number without name"},{"table":1,"sheetRow":14,"number":"4","reason":"number without name"},{"table":1,"sheetRow":15,"number":"6","reason":"number without name"},{"table":1,"sheetRow":16,"number":"9","reason":"number without name"},{"table":2,"sheetRow":30,"number":"8","reason":"number without name"},{"table":2,"sheetRow":31,"number":"10","reason":"number without name"},{"table":2,"sheetRow":32,"number":"11","reason":"number without name"},{"table":2,"sheetRow":33,"number":"9","reason":"number without name"}],"strayCells":[{"cell":"E36","value":"z"}],"counts":{"students":8,"units":16,"cells":128,"todo":128}}</script>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var seed = { units: [], students: [] };
+    try {
+      seed = JSON.parse(document.getElementById("seed").textContent);
+    } catch (err) {
+      seed = { units: [], students: [] };
+    }
+
+    var units = (seed.units || []).map(function (u) {
+      return { id: String(u.id), label: String(u.label || u.id) };
+    }).filter(function (u) { return u.id; });
+
+    var students = (seed.students || []).map(function (s) {
+      return { id: String(s.id), name: String(s.name || "Unnamed"), units: s.units || {} };
+    });
+
+    var unitById = new Map(units.map(function (u) { return [u.id, u]; }));
+    var studentById = new Map(students.map(function (s) { return [s.id, s]; }));
+    var totalUnits = units.length * students.length;
+
+    var STORAGE_KEY = "daily-recitation.v1";
+    var MAX_DAYS = 120;
+    var state = { progress: {}, days: {} };
+    var storageOK = true;
+    var day = todayKey();
+    var cardById = new Map();
+    var rosterRowById = new Map();
+    var progressRowById = new Map();
+    var selectedStudentId = null;
+    var lastRosterScroll = 0;
+    var copyResetTimer = null;
+    var copying = false;
+
+    var els = {
+      todayDate: document.getElementById("todayDate"),
+      storageWarning: document.getElementById("storageWarning"),
+      donut: document.getElementById("donut"),
+      segDone: document.getElementById("segDone"),
+      segProgress: document.getElementById("segProgress"),
+      segTodo: document.getElementById("segTodo"),
+      donePct: document.getElementById("donePct"),
+      countDone: document.getElementById("countDone"),
+      countProgress: document.getElementById("countProgress"),
+      countTodo: document.getElementById("countTodo"),
+      classDone: document.getElementById("classDone"),
+      classTotal: document.getElementById("classTotal"),
+      classPct: document.getElementById("classPct"),
+      classRing: document.getElementById("classRing"),
+      weekRange: document.getElementById("weekRange"),
+      weekChart: document.getElementById("weekChart"),
+      weekEmpty: document.getElementById("weekEmpty"),
+      summaryFoot: document.getElementById("summaryFoot"),
+      studentCount: document.getElementById("studentCount"),
+      studentList: document.getElementById("studentList"),
+      tabToday: document.getElementById("tabToday"),
+      tabProgress: document.getElementById("tabProgress"),
+      tabStudents: document.getElementById("tabStudents"),
+      todayView: document.getElementById("todayView"),
+      progressView: document.getElementById("progressView"),
+      studentsView: document.getElementById("studentsView"),
+      studentsListPanel: document.getElementById("studentsListPanel"),
+      studentDetailPanel: document.getElementById("studentDetailPanel"),
+      studentsMeta: document.getElementById("studentsMeta"),
+      studentRoster: document.getElementById("studentRoster"),
+      backToStudents: document.getElementById("backToStudents"),
+      detailName: document.getElementById("detailName"),
+      detailMeta: document.getElementById("detailMeta"),
+      detailMeter: document.getElementById("detailMeter"),
+      unitList: document.getElementById("unitList"),
+      unitCount: document.getElementById("unitCount"),
+      progressMeta: document.getElementById("progressMeta"),
+      progressClassPct: document.getElementById("progressClassPct"),
+      progressClassDone: document.getElementById("progressClassDone"),
+      progressClassTotal: document.getElementById("progressClassTotal"),
+      progressClassBar: document.getElementById("progressClassBar"),
+      progressDoneUnits: document.getElementById("progressDoneUnits"),
+      progressProgressUnits: document.getElementById("progressProgressUnits"),
+      progressTodoUnits: document.getElementById("progressTodoUnits"),
+      progressList: document.getElementById("progressList"),
+      progressStudentCount: document.getElementById("progressStudentCount"),
+      copyCsv: document.getElementById("copyCsv"),
+      copyCsvLabel: document.getElementById("copyCsvLabel"),
+      copyStatus: document.getElementById("copyStatus"),
+      csvSheet: document.getElementById("csvSheet"),
+      csvSheetText: document.getElementById("csvSheetText"),
+      closeCsvSheet: document.getElementById("closeCsvSheet"),
+      csvBackdrop: document.getElementById("csvBackdrop"),
+      live: document.getElementById("live")
+    };
+
+    function todayKey(date) {
+      var d = date || new Date();
+      var m = String(d.getMonth() + 1).padStart(2, "0");
+      var dayOfMonth = String(d.getDate()).padStart(2, "0");
+      return d.getFullYear() + "-" + m + "-" + dayOfMonth;
+    }
+
+    function readState() {
+      if (!storageOK) return false;
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        var parsed = JSON.parse(raw);
+        if (!parsed || parsed.v !== 1) return false;
+
+        if (parsed.progress && typeof parsed.progress === "object") {
+          students.forEach(function (s) {
+            var src = parsed.progress[s.id];
+            if (!src || typeof src !== "object") return;
+            var clean = {};
+            units.forEach(function (u) {
+              if (src[u.id] === "done" || src[u.id] === "progress") {
+                clean[u.id] = src[u.id];
+              }
+            });
+            if (Object.keys(clean).length) state.progress[s.id] = clean;
+          });
+        }
+
+        if (parsed.days && typeof parsed.days === "object") {
+          Object.keys(parsed.days).forEach(function (key) {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return;
+            var srcDay = parsed.days[key];
+            if (!srcDay || typeof srcDay !== "object") return;
+            var cleanDay = {};
+            students.forEach(function (s) {
+              var entry = srcDay[s.id];
+              if (!entry || typeof entry !== "object") return;
+              var unitId = String(entry.unit);
+              if (!unitById.has(unitId)) return;
+              if (["todo", "progress", "done"].indexOf(entry.status) === -1) return;
+              cleanDay[s.id] = {
+                unit: unitId,
+                status: entry.status,
+                at: Number(entry.at) || 0
+              };
+            });
+            if (Object.keys(cleanDay).length) state.days[key] = cleanDay;
+          });
+        }
+
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function seedProgress() {
+      students.forEach(function (s) {
+        var p = {};
+        units.forEach(function (u) {
+          if (s.units[u.id] === "done" || s.units[u.id] === "progress") {
+            p[u.id] = s.units[u.id];
+          }
+        });
+        if (Object.keys(p).length) state.progress[s.id] = p;
+      });
+    }
+
+    function save() {
+      if (!storageOK) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          v: 1,
+          progress: state.progress,
+          days: state.days
+        }));
+      } catch (err) {
+        storageOK = false;
+        els.storageWarning.hidden = false;
+      }
+    }
+
+    function pruneDays() {
+      var keys = Object.keys(state.days).sort();
+      while (keys.length > MAX_DAYS) {
+        delete state.days[keys.shift()];
+      }
+    }
+
+    function entryFor(studentId) {
+      var dayEntries = state.days[day];
+      var entry = dayEntries && dayEntries[studentId];
+      if (!entry || !unitById.has(entry.unit)) return null;
+      return entry;
+    }
+
+    function nextUnit(studentId) {
+      var p = state.progress[studentId] || {};
+      for (var i = 0; i < units.length; i++) {
+        if (p[units[i].id] !== "done") return units[i];
+      }
+      return null;
+    }
+
+    function doneCountFor(studentId) {
+      var p = state.progress[studentId] || {};
+      var n = 0;
+      units.forEach(function (u) {
+        if (p[u.id] === "done") n++;
+      });
+      return n;
+    }
+
+    function unitCountsFor(studentId) {
+      var p = state.progress[studentId] || {};
+      var counts = { done: 0, progress: 0, todo: 0 };
+      units.forEach(function (u) {
+        var status = p[u.id];
+        if (status === "done") counts.done++;
+        else if (status === "progress") counts.progress++;
+        else counts.todo++;
+      });
+      return counts;
+    }
+
+    function unitStatusFor(studentId, unitId) {
+      var p = state.progress[studentId];
+      var status = p && p[unitId];
+      return status === "done" || status === "progress" ? status : "todo";
+    }
+
+    function unitWord(count) {
+      return count === 1 ? "unit" : "units";
+    }
+
+    function todayStats() {
+      var entries = state.days[day] || {};
+      var counts = { done: 0, progress: 0, todo: 0 };
+      var recorded = 0;
+      var active = 0;
+      students.forEach(function (s) {
+        var entry = entries[s.id];
+        if (entry && unitById.has(entry.unit) && ["todo", "progress", "done"].indexOf(entry.status) !== -1) {
+          counts[entry.status]++;
+          recorded++;
+          active++;
+          return;
+        }
+        if (nextUnit(s.id)) {
+          counts.todo++;
+          active++;
+        }
+      });
+      return { counts: counts, recorded: recorded, active: active };
+    }
+
+    function classDoneCount() {
+      var n = 0;
+      students.forEach(function (s) {
+        n += doneCountFor(s.id);
+      });
+      return n;
+    }
+
+    function renderDate() {
+      try {
+        var fmt = new Intl.DateTimeFormat("en-GB", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+        els.todayDate.textContent = fmt.format(new Date());
+      } catch (err) {
+        els.todayDate.textContent = new Date().toDateString();
+      }
+    }
+
+    function renderSummary() {
+      var stats = todayStats();
+      var counts = stats.counts;
+      var n = stats.active || 1;
+      var pct = Math.round((counts.done / n) * 100);
+
+      els.countDone.textContent = String(counts.done);
+      els.countProgress.textContent = String(counts.progress);
+      els.countTodo.textContent = String(counts.todo);
+
+      var segments = [
+        { el: els.segDone, value: (counts.done / n) * 100 },
+        { el: els.segProgress, value: (counts.progress / n) * 100 },
+        { el: els.segTodo, value: (counts.todo / n) * 100 }
+      ];
+      var visibleSegments = segments.filter(function (seg) { return seg.value > 0; }).length;
+      var gap = visibleSegments > 1 ? 1.6 : 0;
+      var offset = 0;
+
+      segments.forEach(function (seg) {
+        if (seg.value <= 0) {
+          seg.el.style.opacity = "0";
+          seg.el.style.strokeDasharray = "0 100";
+          seg.el.style.strokeDashoffset = "0";
+        } else {
+          seg.el.style.opacity = "1";
+          seg.el.style.strokeDasharray = Math.max(seg.value - gap, 0.5) + " 100";
+          seg.el.style.strokeDashoffset = String(-offset);
+        }
+        offset += seg.value;
+      });
+
+      els.donePct.textContent = pct + "%";
+      var finished = 0;
+      students.forEach(function (s) {
+        if (!nextUnit(s.id) && !entryFor(s.id)) finished++;
+      });
+      if (finished > 0) {
+        els.summaryFoot.hidden = false;
+        els.summaryFoot.textContent = finished + (finished === 1 ? " student has" : " students have") +
+          " finished all " + units.length + " units.";
+      } else {
+        els.summaryFoot.hidden = true;
+        els.summaryFoot.textContent = "";
+      }
+
+      if (stats.active === 0) {
+        els.donut.setAttribute("aria-label", "Every student has finished all units.");
+      } else {
+        els.donut.setAttribute(
+          "aria-label",
+          counts.done + " of " + stats.active + " students done, " +
+          counts.progress + " in progress, " + counts.todo + " not yet."
+        );
+      }
+
+      var done = classDoneCount();
+      var classPct = totalUnits ? Math.round((done / totalUnits) * 100) : 0;
+      els.classDone.textContent = String(done);
+      els.classTotal.textContent = String(totalUnits);
+      els.classPct.textContent = classPct + "%";
+      els.classRing.style.opacity = classPct > 0 ? "1" : "0";
+      els.classRing.style.strokeDasharray = classPct + " 100";
+    }
+
+    function shortWeekday(date) {
+      try {
+        return new Intl.DateTimeFormat("en-GB", { weekday: "short" }).format(date);
+      } catch (err) {
+        return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][date.getDay()];
+      }
+    }
+
+    function shortDayMonth(date) {
+      try {
+        return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(date);
+      } catch (err) {
+        return date.toDateString();
+      }
+    }
+
+    function renderWeekChart() {
+      var now = new Date();
+      var days = [];
+      for (var i = 6; i >= 0; i--) {
+        var dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 12);
+        days.push({ key: todayKey(dt), date: dt });
+      }
+
+      var max = students.length || 1;
+      var ariaParts = [];
+      var recordedTotal = 0;
+
+      els.weekChart.textContent = "";
+
+      days.forEach(function (item) {
+        var entries = state.days[item.key] || {};
+        var counts = { done: 0, progress: 0, todo: 0 };
+
+        students.forEach(function (s) {
+          var entry = entries[s.id];
+          if (!entry || !unitById.has(entry.unit)) return;
+          if (["todo", "progress", "done"].indexOf(entry.status) === -1) return;
+          counts[entry.status]++;
+        });
+
+        var dayTotal = counts.done + counts.progress + counts.todo;
+        recordedTotal += dayTotal;
+
+        var col = document.createElement("div");
+        col.className = "week-day" + (item.key === day ? " is-today" : "");
+
+        var bar = document.createElement("div");
+        bar.className = "week-bar";
+        bar.title = shortWeekday(item.date) + ": " + counts.done + " done, " +
+          counts.progress + " in progress, " + counts.todo + " not yet";
+
+        ["done", "progress", "todo"].forEach(function (kind) {
+          if (!counts[kind]) return;
+          var seg = document.createElement("span");
+          seg.className = "week-seg " + kind;
+          seg.style.height = ((counts[kind] / max) * 100) + "%";
+          bar.append(seg);
+        });
+
+        var label = document.createElement("span");
+        label.className = "week-label";
+        label.textContent = shortWeekday(item.date);
+
+        col.append(bar, label);
+        els.weekChart.append(col);
+        ariaParts.push(label.textContent + " " + dayTotal + " recorded");
+      });
+
+      els.weekRange.textContent = shortDayMonth(days[0].date) + " – " + shortDayMonth(days[6].date);
+
+      if (recordedTotal === 0) {
+        els.weekChart.setAttribute("aria-label", "No status updates recorded in the last 7 days.");
+      } else {
+        els.weekChart.setAttribute(
+          "aria-label",
+          "Status updates recorded in the last 7 days: " + ariaParts.join(", ") + "."
+        );
+      }
+
+      els.weekEmpty.hidden = recordedTotal > 0;
+    }
+
+    function updateCard(student) {
+      var li = cardById.get(student.id);
+      if (!li) return;
+
+      var entry = entryFor(student.id);
+      var unit = entry ? unitById.get(entry.unit) : nextUnit(student.id);
+      var status = entry ? entry.status : null;
+
+      li.dataset.status = status || "none";
+
+      var tag = li.querySelector(".unit-tag");
+      var unitEl = li.querySelector(".unit");
+      var choices = li.querySelector(".choices");
+      var tallyValue = li.querySelector(".tally b");
+
+      if (unit) {
+        tag.textContent = entry ? "Today" : "Next up";
+        unitEl.textContent = unit.label;
+        unitEl.title = unit.label;
+      } else {
+        tag.textContent = "Complete";
+        unitEl.textContent = "All " + units.length + " units done";
+        unitEl.title = unitEl.textContent;
+      }
+
+      choices.hidden = !unit;
+
+      if (unit) {
+        Array.prototype.forEach.call(li.querySelectorAll(".choice"), function (btn) {
+          btn.setAttribute("aria-pressed", status === btn.dataset.status ? "true" : "false");
+        });
+      }
+
+      tallyValue.textContent = doneCountFor(student.id) + "/" + units.length;
+    }
+
+    function updateAllCards() {
+      students.forEach(updateCard);
+    }
+
+    function setStatus(studentId, status) {
+      var student = studentById.get(studentId);
+      if (!student) return;
+
+      var entry = entryFor(studentId);
+      var unit = entry ? unitById.get(entry.unit) : nextUnit(studentId);
+      if (!unit) return;
+
+      if (entry && entry.status === status) return;
+
+      var p = state.progress[studentId] || (state.progress[studentId] = {});
+      if (status === "todo") {
+        delete p[unit.id];
+      } else {
+        p[unit.id] = status;
+      }
+      if (!Object.keys(p).length) delete state.progress[studentId];
+
+      var dayEntries = state.days[day] || (state.days[day] = {});
+      dayEntries[studentId] = { unit: unit.id, status: status, at: Date.now() };
+
+      pruneDays();
+      save();
+      updateCard(student);
+      renderSummary();
+      renderWeekChart();
+      updateRosterRow(student);
+      renderStudentsMeta();
+      renderProgress();
+
+      var wording = status === "done" ? "done" : status === "progress" ? "in progress" : "not yet";
+      els.live.textContent = student.name + ": " + unit.label + " — " + wording + ".";
+    }
+
+    function createChoices(ariaLabel) {
+      var group = document.createElement("div");
+      group.className = "choices";
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-label", ariaLabel);
+
+      [
+        ["todo", "Not yet"],
+        ["progress", "In progress"],
+        ["done", "Done"]
+      ].forEach(function (pair) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.dataset.status = pair[0];
+        btn.setAttribute("aria-pressed", "false");
+        btn.textContent = pair[1];
+        group.append(btn);
+      });
+
+      return group;
+    }
+
+    function buildStudents() {
+      els.studentList.textContent = "";
+      students.forEach(function (student) {
+        var li = document.createElement("li");
+        li.className = "student";
+        li.dataset.id = student.id;
+        li.dataset.status = "none";
+
+        var top = document.createElement("div");
+        top.className = "student-top";
+
+        var who = document.createElement("div");
+        who.className = "who";
+
+        var name = document.createElement("h3");
+        name.className = "name";
+        name.textContent = student.name;
+
+        var unitRow = document.createElement("div");
+        unitRow.className = "unit-row";
+
+        var tag = document.createElement("span");
+        tag.className = "unit-tag";
+
+        var unit = document.createElement("span");
+        unit.className = "unit";
+
+        unitRow.append(tag, unit);
+        who.append(name, unitRow);
+
+        var tally = document.createElement("span");
+        tally.className = "tally";
+        var tallyValue = document.createElement("b");
+        tally.append(tallyValue, document.createTextNode("done"));
+
+        top.append(who, tally);
+
+        var choices = createChoices("Record today’s recitation for " + student.name);
+
+        li.append(top, choices);
+        els.studentList.append(li);
+        cardById.set(student.id, li);
+      });
+      els.studentCount.textContent = String(students.length);
+    }
+
+
+    function renderStudentsMeta() {
+      var done = classDoneCount();
+      var noun = students.length === 1 ? " student" : " students";
+      els.studentsMeta.textContent = students.length + noun + " · " + done +
+        " of " + totalUnits + " " + unitWord(totalUnits) + " done";
+    }
+
+    function updateRosterRow(student) {
+      var row = rosterRowById.get(student.id);
+      if (!row) return;
+      var counts = unitCountsFor(student.id);
+      var next = nextUnit(student.id);
+      row.count.textContent = counts.done + "/" + units.length;
+      row.next.textContent = next ? "Next: " + next.label : "All " + units.length + " units done";
+      row.meter.style.width = (units.length ? (counts.done / units.length) * 100 : 0) + "%";
+    }
+
+    function updateAllRosterRows() {
+      students.forEach(updateRosterRow);
+    }
+
+    function buildRoster() {
+      els.studentRoster.textContent = "";
+      rosterRowById.clear();
+
+      students.forEach(function (student) {
+        var li = document.createElement("li");
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "roster-row";
+        btn.dataset.id = student.id;
+
+        var main = document.createElement("span");
+        main.className = "roster-main";
+
+        var name = document.createElement("span");
+        name.className = "roster-name";
+        name.textContent = student.name;
+
+        var next = document.createElement("span");
+        next.className = "roster-next";
+
+        main.append(name, next);
+
+        var side = document.createElement("span");
+        side.className = "roster-side";
+
+        var countWrap = document.createElement("span");
+        countWrap.className = "roster-count";
+
+        var count = document.createElement("b");
+        var countLabel = document.createElement("span");
+        countLabel.textContent = "done";
+        countWrap.append(count, countLabel);
+
+        var chev = document.createElement("span");
+        chev.className = "chev";
+        chev.setAttribute("aria-hidden", "true");
+
+        side.append(countWrap, chev);
+
+        var meterWrap = document.createElement("span");
+        meterWrap.className = "meter roster-meter";
+        var meter = document.createElement("span");
+        meterWrap.append(meter);
+
+        btn.append(main, side, meterWrap);
+        li.append(btn);
+        els.studentRoster.append(li);
+
+        rosterRowById.set(student.id, {
+          el: btn,
+          next: next,
+          count: count,
+          meter: meter
+        });
+
+        updateRosterRow(student);
+      });
+
+      renderStudentsMeta();
+    }
+
+    function renderDetailHeader(student) {
+      var counts = unitCountsFor(student.id);
+      els.detailName.textContent = student.name;
+      els.detailMeta.textContent =
+        counts.done + " of " + units.length + " " + unitWord(units.length) + " done · " +
+        counts.progress + " in progress · " + counts.todo + " not yet";
+      els.detailMeter.style.width = (units.length ? (counts.done / units.length) * 100 : 0) + "%";
+    }
+
+    function setUnitRowState(row, status) {
+      Array.prototype.forEach.call(row.querySelectorAll(".choice"), function (btn) {
+        btn.setAttribute("aria-pressed", status === btn.dataset.status ? "true" : "false");
+      });
+    }
+
+    function buildUnitList(student) {
+      els.unitList.textContent = "";
+      els.unitCount.textContent = String(units.length);
+      var entry = entryFor(student.id);
+
+      units.forEach(function (unit) {
+        var li = document.createElement("li");
+        li.className = "unit-item";
+        li.dataset.unit = unit.id;
+
+        var top = document.createElement("div");
+        top.className = "unit-name-row";
+
+        var label = document.createElement("span");
+        label.className = "unit-name";
+        label.textContent = unit.label;
+        top.append(label);
+
+        if (entry && entry.unit === unit.id) {
+          var flag = document.createElement("span");
+          flag.className = "unit-flag";
+          flag.textContent = "Today";
+          top.append(flag);
+        }
+
+        var choices = createChoices("Set " + unit.label + " status for " + student.name);
+        li.append(top, choices);
+        setUnitRowState(li, unitStatusFor(student.id, unit.id));
+        els.unitList.append(li);
+      });
+    }
+
+
+    function updateProgressRow(student) {
+      var row = progressRowById.get(student.id);
+      if (!row) return;
+      var counts = unitCountsFor(student.id);
+      row.count.textContent = counts.done + "/" + units.length;
+      row.meter.style.width = (units.length ? (counts.done / units.length) * 100 : 0) + "%";
+    }
+
+    function buildProgressList() {
+      els.progressList.textContent = "";
+      progressRowById.clear();
+
+      students.forEach(function (student) {
+        var li = document.createElement("li");
+        li.className = "progress-row";
+
+        var head = document.createElement("div");
+        head.className = "progress-row-head";
+
+        var name = document.createElement("span");
+        name.className = "progress-name";
+        name.textContent = student.name;
+
+        var count = document.createElement("span");
+        count.className = "progress-count";
+
+        head.append(name, count);
+
+        var meterWrap = document.createElement("div");
+        meterWrap.className = "meter progress-meter";
+        var fill = document.createElement("span");
+        meterWrap.append(fill);
+
+        li.append(head, meterWrap);
+        els.progressList.append(li);
+        progressRowById.set(student.id, { count: count, meter: fill });
+        updateProgressRow(student);
+      });
+
+      els.progressStudentCount.textContent = String(students.length);
+    }
+
+    function renderProgress() {
+      var done = 0;
+      var progress = 0;
+      var todo = 0;
+
+      students.forEach(function (student) {
+        var counts = unitCountsFor(student.id);
+        done += counts.done;
+        progress += counts.progress;
+        todo += counts.todo;
+      });
+
+      var total = done + progress + todo;
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      var noun = students.length === 1 ? " student" : " students";
+
+      els.progressMeta.textContent = students.length + noun + " · " + done +
+        " of " + total + " " + unitWord(total) + " done";
+      els.progressClassPct.textContent = pct + "%";
+      els.progressClassDone.textContent = String(done);
+      els.progressClassTotal.textContent = String(total);
+      els.progressClassBar.style.width = pct + "%";
+      els.progressDoneUnits.textContent = String(done);
+      els.progressProgressUnits.textContent = String(progress);
+      els.progressTodoUnits.textContent = String(todo);
+
+      students.forEach(updateProgressRow);
+    }
+
+    function setActiveTab(which) {
+      var tabs = {
+        today: els.tabToday,
+        progress: els.tabProgress,
+        students: els.tabStudents
+      };
+
+      Object.keys(tabs).forEach(function (key) {
+        var isActive = key === which;
+        tabs[key].classList.toggle("is-active", isActive);
+        if (isActive) {
+          tabs[key].setAttribute("aria-current", "page");
+        } else {
+          tabs[key].removeAttribute("aria-current");
+        }
+      });
+    }
+
+    function showToday() {
+      selectedStudentId = null;
+      els.studentsView.hidden = true;
+      els.progressView.hidden = true;
+      els.todayView.hidden = false;
+      setActiveTab("today");
+      document.title = "Today · Daily Recitation";
+      window.scrollTo(0, 0);
+      handleRollover();
+    }
+
+    function showProgress() {
+      selectedStudentId = null;
+      els.todayView.hidden = true;
+      els.studentsView.hidden = true;
+      els.progressView.hidden = false;
+      setActiveTab("progress");
+      document.title = "Progress · Daily Recitation";
+      window.scrollTo(0, 0);
+      renderProgress();
+    }
+
+    function showStudentsRoot(options) {
+      options = options || {};
+      var previousId = selectedStudentId;
+      selectedStudentId = null;
+
+      els.todayView.hidden = true;
+      els.progressView.hidden = true;
+      els.studentsView.hidden = false;
+      els.studentDetailPanel.hidden = true;
+      els.studentsListPanel.hidden = false;
+      setActiveTab("students");
+      document.title = "Students · Daily Recitation";
+
+      updateAllRosterRows();
+      renderStudentsMeta();
+
+      if (options.restoreScroll) {
+        window.scrollTo(0, lastRosterScroll);
+      } else {
+        window.scrollTo(0, 0);
+      }
+
+      if (options.focusRow && previousId) {
+        var row = rosterRowById.get(previousId);
+        if (row) row.el.focus({ preventScroll: true });
+      }
+    }
+
+    function openStudent(studentId) {
+      var student = studentById.get(studentId);
+      if (!student) return;
+
+      lastRosterScroll = window.scrollY;
+      selectedStudentId = studentId;
+
+      els.todayView.hidden = true;
+      els.progressView.hidden = true;
+      els.studentsView.hidden = false;
+      els.studentsListPanel.hidden = true;
+      els.studentDetailPanel.hidden = false;
+
+      setActiveTab("students");
+      document.title = student.name + " · Daily Recitation";
+      renderDetailHeader(student);
+      buildUnitList(student);
+      window.scrollTo(0, 0);
+      els.detailName.focus({ preventScroll: true });
+    }
+
+    function setUnitStatus(studentId, unitId, status) {
+      var student = studentById.get(studentId);
+      var unit = unitById.get(unitId);
+      if (!student || !unit) return;
+
+      var current = unitStatusFor(studentId, unitId);
+      var entry = entryFor(studentId);
+      var pinned = entry && entry.unit === unitId;
+
+      if (current === status && !(pinned && entry.status !== status)) return;
+
+      var p = state.progress[studentId] || (state.progress[studentId] = {});
+      if (status === "todo") {
+        delete p[unitId];
+      } else {
+        p[unitId] = status;
+      }
+      if (!Object.keys(p).length) delete state.progress[studentId];
+
+      if (pinned) {
+        var dayEntries = state.days[day] || (state.days[day] = {});
+        dayEntries[studentId] = { unit: unitId, status: status, at: Date.now() };
+      }
+
+      save();
+      updateCard(student);
+      renderSummary();
+      renderWeekChart();
+      updateRosterRow(student);
+      renderStudentsMeta();
+      renderProgress();
+
+      if (selectedStudentId === studentId) {
+        var rows = els.unitList.querySelectorAll(".unit-item");
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i].dataset.unit === unitId) {
+            setUnitRowState(rows[i], status);
+            break;
+          }
+        }
+        renderDetailHeader(student);
+      }
+
+      var wording = status === "done" ? "done" : status === "progress" ? "in progress" : "not yet";
+      els.live.textContent = student.name + ": " + unit.label + " — " + wording + ".";
+    }
+
+    function handleRollover() {
+      var key = todayKey();
+      if (key === day) return;
+      day = key;
+      renderDate();
+      updateAllCards();
+      renderSummary();
+      renderWeekChart();
+
+      if (selectedStudentId) {
+        var student = studentById.get(selectedStudentId);
+        if (student) {
+          renderDetailHeader(student);
+          buildUnitList(student);
+        }
+      }
+    }
+
+
+    function buildCsv() {
+      function quote(value) {
+        return '"' + String(value).replace(/"/g, '""') + '"';
+      }
+
+      var lines = [];
+      var header = [quote("Student")];
+      units.forEach(function (unit) {
+        header.push(quote(unit.label));
+      });
+      lines.push(header.join(","));
+
+      students.forEach(function (student) {
+        var cells = [quote(student.name)];
+        units.forEach(function (unit) {
+          var status = unitStatusFor(student.id, unit.id);
+          cells.push(quote(status === "done" ? "✓" : status === "progress" ? "~" : ""));
+        });
+        lines.push(cells.join(","));
+      });
+
+      return lines.join("\r\n");
+    }
+
+    function legacyCopy(text) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.top = "-1000px";
+      area.style.left = "-1000px";
+      area.style.fontSize = "16px";
+      document.body.appendChild(area);
+      area.select();
+      area.setSelectionRange(0, area.value.length);
+
+      var ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch (err) {
+        ok = false;
+      }
+
+      document.body.removeChild(area);
+      return ok;
+    }
+
+    function setCopyStatus(message, isError) {
+      els.copyStatus.textContent = message;
+      els.copyStatus.classList.toggle("is-error", !!isError);
+    }
+
+    function openCsvSheet(text) {
+      els.csvSheetText.value = text;
+      els.csvSheet.hidden = false;
+      document.body.classList.add("sheet-open");
+
+      window.requestAnimationFrame(function () {
+        els.csvSheetText.focus();
+        els.csvSheetText.select();
+      });
+    }
+
+    function closeCsvSheet() {
+      if (els.csvSheet.hidden) return;
+      els.csvSheet.hidden = true;
+      document.body.classList.remove("sheet-open");
+      setCopyStatus("", false);
+      els.copyCsv.focus();
+    }
+
+    function copyCsvToClipboard() {
+      if (copying) return;
+      copying = true;
+
+      var csv = buildCsv();
+      var settled = false;
+
+      if (copyResetTimer) {
+        clearTimeout(copyResetTimer);
+        copyResetTimer = null;
+      }
+      els.copyCsvLabel.textContent = "Copying…";
+      setCopyStatus("", false);
+
+      function finish(ok) {
+        if (settled) return;
+        settled = true;
+        copying = false;
+
+        if (ok) {
+          els.copyCsvLabel.textContent = "Copied";
+          setCopyStatus("Copied CSV. In Google Sheets, use Data → Split text to columns.", false);
+          copyResetTimer = setTimeout(function () {
+            els.copyCsvLabel.textContent = "Copy CSV";
+            setCopyStatus("", false);
+            copyResetTimer = null;
+          }, 6000);
+        } else {
+          els.copyCsvLabel.textContent = "Copy CSV";
+          setCopyStatus("Copy isn’t available here. Select the CSV below and copy it.", true);
+          openCsvSheet(csv);
+        }
+      }
+
+      function fallback() {
+        var ok = false;
+        try {
+          ok = legacyCopy(csv);
+        } catch (err) {
+          ok = false;
+        }
+        finish(ok);
+      }
+
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        try {
+          navigator.clipboard.writeText(csv).then(function () {
+            finish(true);
+          }, fallback);
+        } catch (err) {
+          fallback();
+        }
+      } else {
+        fallback();
+      }
+    }
+
+    function init() {
+      try {
+        localStorage.setItem("__dr_test__", "1");
+        localStorage.removeItem("__dr_test__");
+      } catch (err) {
+        storageOK = false;
+      }
+
+      if (!storageOK) els.storageWarning.hidden = false;
+
+      if (readState()) {
+        // Re-save immediately so entries for retired units (AL-FIIL, the old
+        // Al BAYNIYYAH / AL ALAQ ids, and any other removed unit) are purged
+        // from localStorage instead of lingering in the saved snapshot.
+        save();
+      } else {
+        seedProgress();
+      }
+
+      els.classTotal.textContent = String(totalUnits);
+      els.unitCount.textContent = String(units.length);
+      renderDate();
+      buildStudents();
+      buildRoster();
+      buildProgressList();
+      updateAllCards();
+      renderSummary();
+      renderWeekChart();
+      renderStudentsMeta();
+      renderProgress();
+      setActiveTab("today");
+
+      els.studentList.addEventListener("click", function (ev) {
+        var btn = ev.target.closest(".choice");
+        if (!btn) return;
+        var li = btn.closest(".student");
+        if (!li) return;
+        setStatus(li.dataset.id, btn.dataset.status);
+      });
+
+      els.studentRoster.addEventListener("click", function (ev) {
+        var row = ev.target.closest(".roster-row");
+        if (!row) return;
+        openStudent(row.dataset.id);
+      });
+
+      els.unitList.addEventListener("click", function (ev) {
+        var btn = ev.target.closest(".choice");
+        if (!btn) return;
+        var row = btn.closest(".unit-item");
+        if (!row || !selectedStudentId) return;
+        setUnitStatus(selectedStudentId, row.dataset.unit, btn.dataset.status);
+      });
+
+      els.backToStudents.addEventListener("click", function () {
+        showStudentsRoot({ restoreScroll: true, focusRow: true });
+      });
+
+      els.tabToday.addEventListener("click", function () {
+        if (els.todayView.hidden) {
+          showToday();
+          return;
+        }
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+      });
+
+      els.tabProgress.addEventListener("click", function () {
+        if (els.progressView.hidden) {
+          showProgress();
+          return;
+        }
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+      });
+
+      els.tabStudents.addEventListener("click", function () {
+        showStudentsRoot();
+      });
+
+      els.copyCsv.addEventListener("click", copyCsvToClipboard);
+      els.closeCsvSheet.addEventListener("click", closeCsvSheet);
+      els.csvBackdrop.addEventListener("click", closeCsvSheet);
+
+      document.addEventListener("keydown", function (ev) {
+        if (ev.key === "Escape" && !els.csvSheet.hidden) {
+          ev.preventDefault();
+          closeCsvSheet();
+        }
+      });
+
+      els.csvSheet.addEventListener("keydown", function (ev) {
+        if (ev.key !== "Tab") return;
+        var first = els.closeCsvSheet;
+        var last = els.csvSheetText;
+        if (ev.shiftKey && document.activeElement === first) {
+          ev.preventDefault();
+          last.focus();
+        } else if (!ev.shiftKey && document.activeElement === last) {
+          ev.preventDefault();
+          first.focus();
+        }
+      });
+
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) handleRollover();
+      });
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>
