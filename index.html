@@ -1195,6 +1195,189 @@
     border: 0;
   }
 
+
+  /* ---------- Manage / forms / empty states / backup ---------- */
+
+  .btn-primary {
+    min-height: var(--tap);
+    padding: 0 16px;
+    border: 0;
+    border-radius: 14px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 8px 18px -10px rgba(17, 24, 47, 0.7);
+  }
+
+  .btn-primary:active { transform: scale(0.99); }
+
+  .btn-ghost {
+    min-height: var(--tap);
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .btn-danger {
+    min-height: var(--tap);
+    padding: 0 14px;
+    border: 1px solid rgba(177, 18, 59, 0.28);
+    border-radius: 14px;
+    background: #fff7f9;
+    color: var(--crimson);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .manage-bar {
+    display: flex;
+    gap: 8px;
+    margin: 12px 2px 0;
+    flex-wrap: wrap;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 8px;
+    margin: 12px 2px 0;
+    flex-wrap: wrap;
+  }
+
+  .inline-form {
+    display: flex;
+    gap: 8px;
+    margin: 10px 2px 0;
+    flex-wrap: wrap;
+  }
+
+  .inline-form input {
+    flex: 1 1 160px;
+    min-width: 0;
+    min-height: var(--tap);
+    padding: 0 12px;
+    border: 1px solid rgba(16, 22, 44, 0.16);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 14px;
+  }
+
+  .inline-form input:focus-visible {
+    outline: 2.5px solid #3b4bd8;
+    outline-offset: 1px;
+  }
+
+  .empty-state {
+    margin-top: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    box-shadow:
+      0 1px 1px rgba(16, 22, 44, 0.035),
+      0 18px 40px -28px rgba(16, 22, 44, 0.38);
+  }
+
+  .empty-state h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .empty-state p {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .empty-state .btn-primary { margin-top: 14px; }
+
+  .empty-note {
+    margin: 12px 2px 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .backup-card { margin-top: 12px; padding: 18px; }
+
+  .backup-text {
+    margin: 10px 0 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .backup-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .unit-manage {
+    display: none;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .unit-list.managing .unit-manage { display: flex; }
+  .unit-list.managing .choices { display: none; }
+
+  .manage-btn {
+    min-height: 40px;
+    padding: 0 11px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: #f8f9fc;
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .manage-btn.danger {
+    color: var(--crimson);
+    border-color: rgba(177, 18, 59, 0.25);
+    background: #fff7f9;
+  }
+
+  .manage-btn[disabled] { opacity: 0.45; }
+
+  .rename-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 10px;
+    border: 1.5px solid #3b4bd8;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 650;
+  }
+
+  .warning button {
+    margin-left: 6px;
+    padding: 2px 10px;
+    border: 1px solid rgba(122, 74, 18, 0.35);
+    border-radius: 8px;
+    background: #fff;
+    color: #7a4a12;
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1211,6 +1394,10 @@
     <p class="warning" id="storageWarning" hidden>
     This browser won’t let the app save data, so changes will disappear when you close the tab.
     </p>
+    <div class="warning" id="migrationNotice" hidden>
+      <span>Previous data was found and moved to the new format. Student and unit names were not saved in the old version, so they show as their saved IDs — please rename them.</span>
+      <button type="button" id="dismissMigration">Dismiss</button>
+    </div>
     <main id="appMain">
       <div class="view" id="todayView">
 <header class="page-head">
@@ -1306,6 +1493,11 @@
         </div>
         <p class="hint" id="recordHint">Tap a status to record today’s recitation. Progress is saved on this device.</p>
         <ul class="students" id="studentList" aria-describedby="recordHint"></ul>
+        <div class="empty-state" id="todayEmpty" hidden>
+          <h2 id="todayEmptyTitle">No students yet</h2>
+          <p id="todayEmptyText">Add your first student to start recording daily recitation.</p>
+          <button class="btn-primary" type="button" id="emptyPrimary">Add student</button>
+        </div>
       </section>
 
       </div>
@@ -1341,6 +1533,17 @@
           </ul>
         </section>
 
+        <section class="card backup-card" aria-labelledby="backupTitle">
+          <h2 class="card-label" id="backupTitle">Backup</h2>
+          <p class="backup-text">Data is saved only on this device. Export a JSON backup before clearing browser data, and import it to restore.</p>
+          <div class="backup-actions">
+            <button class="btn-primary" type="button" id="exportJson">Export JSON</button>
+            <button class="btn-ghost" type="button" id="importJson">Import JSON</button>
+            <input type="file" id="importFile" accept="application/json,.json" hidden>
+          </div>
+          <p class="copy-status" id="backupStatus" role="status" aria-live="polite"></p>
+        </section>
+
         <section aria-labelledby="studentProgressTitle">
           <div class="list-head">
             <h2 id="studentProgressTitle">Students</h2>
@@ -1348,6 +1551,7 @@
           </div>
           <p class="hint" id="progressHint">Units done for each student.</p>
           <ul class="progress-list" id="progressList" aria-describedby="progressHint"></ul>
+          <p class="empty-note" id="progressEmpty" hidden>No students yet.</p>
         </section>
       </div>
 
@@ -1359,7 +1563,17 @@
             <p class="today-date" id="studentsMeta">—</p>
           </header>
           <p class="hint" id="rosterHint">Tap a student to update their overall progress.</p>
+          <div class="manage-bar">
+            <button class="btn-primary" type="button" id="addStudentBtn">+ Add student</button>
+          </div>
+          <form class="inline-form" id="addStudentForm" hidden>
+            <label class="sr-only" for="newStudentName">Student name</label>
+            <input id="newStudentName" type="text" maxlength="80" autocomplete="off" placeholder="Student name">
+            <button class="btn-primary" type="submit">Add</button>
+            <button class="btn-ghost" type="button" id="cancelAddStudent">Cancel</button>
+          </form>
           <ul class="roster" id="studentRoster" aria-describedby="rosterHint"></ul>
+        <p class="empty-note" id="rosterEmpty" hidden>No students yet. Add your first student above.</p>
         </div>
 
         <div class="panel" id="studentDetailPanel" hidden>
@@ -1375,13 +1589,34 @@
             <p class="detail-meta" id="detailMeta">—</p>
             <div class="meter detail-meter" aria-hidden="true"><span id="detailMeter"></span></div>
           </header>
+          <div class="detail-actions">
+            <button class="btn-ghost" type="button" id="renameStudentBtn">Rename</button>
+            <button class="btn-danger" type="button" id="deleteStudentBtn">Delete student</button>
+          </div>
+          <form class="inline-form" id="renameStudentForm" hidden>
+            <label class="sr-only" for="renameStudentInput">New name</label>
+            <input id="renameStudentInput" type="text" maxlength="80" autocomplete="off" placeholder="Student name">
+            <button class="btn-primary" type="submit">Save</button>
+            <button class="btn-ghost" type="button" id="cancelRenameStudent">Cancel</button>
+          </form>
 
           <div class="list-head">
             <h2 id="unitsHeading">Units</h2>
             <span class="count-chip" id="unitCount">0</span>
           </div>
           <p class="hint" id="unitHint">Set each unit’s status. Changes save immediately.</p>
+          <div class="manage-bar">
+            <button class="btn-primary" type="button" id="addUnitBtn">+ Add unit</button>
+            <button class="btn-ghost" type="button" id="manageUnitsBtn" aria-pressed="false">Manage units</button>
+          </div>
+          <form class="inline-form" id="addUnitForm" hidden>
+            <label class="sr-only" for="newUnitName">Unit name</label>
+            <input id="newUnitName" type="text" maxlength="80" autocomplete="off" placeholder="Unit name">
+            <button class="btn-primary" type="submit">Add</button>
+            <button class="btn-ghost" type="button" id="cancelAddUnit">Cancel</button>
+          </form>
           <ul class="unit-list" id="unitList" aria-labelledby="unitsHeading" aria-describedby="unitHint"></ul>
+          <p class="empty-note" id="unitEmpty" hidden>No units yet. Add your first unit above.</p>
         </div>
       </div>
     </main>
@@ -1423,36 +1658,39 @@
   <div class="sr-only" role="status" aria-live="polite" id="live"></div>
   <noscript><p style="padding:0 18px;font:14px -apple-system,sans-serif;color:#7a4a12">This app needs JavaScript to work.</p></noscript>
 
-  <!-- Read-only snapshot generated from data.json (units and students, all cells start empty).
-       After first launch the browser's localStorage is the source of truth. -->
-  <script id="seed" type="application/json">{"meta":{"app":"Daily Recitation","source":{"file":"Hafizlik_Takip_Tablosu_November_2026.xlsx","sheet":"Hafızlık Takip","sheetsInWorkbook":["Hafızlık Takip","Attendance","Weekly Call","Grafik"]},"parsedAt":"2026-11-09T15:33:28+05:00","cellMapping":{"✓":"done","~":"progress","empty":"todo"},"skippedColumns":["2","3","(blank)"],"notes":["Tamamlanan is a computed column and is not a unit.","All unit cells were empty in this workbook; every unit starts as todo.","Step 6: unit list replaced. AL-FIIL removed; AL BAYYINAH and AL ALAQ added with new ids (al-bayyinah-v2, al-alaq-v2) so progress saved under the old 'Al BAYNIYYAH' / 'AL ALAQ' ids cannot resurface. All other ids are unchanged."]},"units":[{"id":"al-bayyinah-v2","label":"AL BAYYINAH"},{"id":"al-alaq-v2","label":"AL ALAQ"},{"id":"Yasin 1 sayfa","label":"Yasin 1 sayfa","table":1},{"id":"Yasin 2 sayfa","label":"Yasin 2 sayfa","table":1},{"id":"Yasin 3 sayfa","label":"Yasin 3 sayfa","table":1},{"id":"Yasin 4 sayfa","label":"Yasin 4 sayfa","table":1},{"id":"Yasin 5 sayfa","label":"Yasin 5 sayfa","table":1},{"id":"Yasin 6 sayfa","label":"Yasin 6 sayfa","table":1},{"id":"AL MULK","label":"AL MULK","table":1},{"id":"AN NABA","label":"AN NABA","table":2},{"id":"AL BALAD","label":"AL BALAD","table":2},{"id":"AL FAJR","label":"AL FAJR","table":2},{"id":"ASH SHAMS","label":"ASH SHAMS","table":2},{"id":"AL LAYL","label":"AL LAYL","table":2},{"id":"AL GHASHIYAH","label":"AL GHASHIYAH","table":2},{"id":"AL A'LA","label":"AL A'LA","table":2}],"students":[{"id":1,"name":"Student 1","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":5},{"table":2,"row":22}]},{"id":2,"name":"Student 2","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":6},{"table":2,"row":23}]},{"id":3,"name":"Student 3","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":7},{"table":2,"row":24}]},{"id":4,"name":"Student 4","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":8},{"table":2,"row":25}]},{"id":5,"name":"Student 5","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":9},{"table":2,"row":26}]},{"id":6,"name":"Student 6","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":10},{"table":2,"row":27}]},{"id":7,"name":"Student 7","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":11},{"table":2,"row":28}]},{"id":8,"name":"Student 8","units":{"al-bayyinah-v2":"todo","al-alaq-v2":"todo","Yasin 1 sayfa":"todo","Yasin 2 sayfa":"todo","Yasin 3 sayfa":"todo","Yasin 4 sayfa":"todo","Yasin 5 sayfa":"todo","Yasin 6 sayfa":"todo","AL MULK":"todo","AN NABA":"todo","AL BALAD":"todo","AL FAJR":"todo","ASH SHAMS":"todo","AL LAYL":"todo","AL GHASHIYAH":"todo","AL A'LA":"todo"},"sheetRows":[{"table":1,"row":12},{"table":2,"row":29}]}],"ignoredRows":[{"table":1,"sheetRow":13,"number":"10","reason":"number without name"},{"table":1,"sheetRow":14,"number":"4","reason":"number without name"},{"table":1,"sheetRow":15,"number":"6","reason":"number without name"},{"table":1,"sheetRow":16,"number":"9","reason":"number without name"},{"table":2,"sheetRow":30,"number":"8","reason":"number without name"},{"table":2,"sheetRow":31,"number":"10","reason":"number without name"},{"table":2,"sheetRow":32,"number":"11","reason":"number without name"},{"table":2,"sheetRow":33,"number":"9","reason":"number without name"}],"strayCells":[{"cell":"E36","value":"z"}],"counts":{"students":8,"units":16,"cells":128,"todo":128}}</script>
+  <!-- Data lives only in the browser's localStorage. This file ships with no
+       students or units, so nothing about real students is stored in the repo. -->
 
   <script>
   (function () {
     "use strict";
 
-    var seed = { units: [], students: [] };
-    try {
-      seed = JSON.parse(document.getElementById("seed").textContent);
-    } catch (err) {
-      seed = { units: [], students: [] };
+    var STORAGE_KEY = "daily-recitation.v2";
+    var LEGACY_KEY = "daily-recitation.v1";
+    var MAX_DAYS = 120;
+
+    // The roster is empty by default. Students and units live only in
+    // localStorage; this file ships with none of them.
+    var units = [];
+    var students = [];
+    var unitById = new Map();
+    var studentById = new Map();
+    var totalUnits = 0;
+    var state = { progress: {}, days: {} };
+    var migrated = false;
+    var managingUnits = false;
+    var emptyPrimaryAction = null;
+
+    function newId(prefix) {
+      return prefix + "-" + Date.now().toString(36) + "-" +
+        Math.floor(Math.random() * 46656).toString(36);
     }
 
-    var units = (seed.units || []).map(function (u) {
-      return { id: String(u.id), label: String(u.label || u.id) };
-    }).filter(function (u) { return u.id; });
-
-    var students = (seed.students || []).map(function (s) {
-      return { id: String(s.id), name: String(s.name || "Unnamed"), units: s.units || {} };
-    });
-
-    var unitById = new Map(units.map(function (u) { return [u.id, u]; }));
-    var studentById = new Map(students.map(function (s) { return [s.id, s]; }));
-    var totalUnits = units.length * students.length;
-
-    var STORAGE_KEY = "daily-recitation.v1";
-    var MAX_DAYS = 120;
-    var state = { progress: {}, days: {} };
+    function rebuildIndexes() {
+      unitById = new Map(units.map(function (u) { return [u.id, u]; }));
+      studentById = new Map(students.map(function (s) { return [s.id, s]; }));
+      totalUnits = units.length * students.length;
+    }
     var storageOK = true;
     var day = todayKey();
     var cardById = new Map();
@@ -1517,7 +1755,35 @@
       csvSheetText: document.getElementById("csvSheetText"),
       closeCsvSheet: document.getElementById("closeCsvSheet"),
       csvBackdrop: document.getElementById("csvBackdrop"),
-      live: document.getElementById("live")
+      live: document.getElementById("live"),
+      migrationNotice: document.getElementById("migrationNotice"),
+      dismissMigration: document.getElementById("dismissMigration"),
+      todayEmpty: document.getElementById("todayEmpty"),
+      todayEmptyTitle: document.getElementById("todayEmptyTitle"),
+      todayEmptyText: document.getElementById("todayEmptyText"),
+      emptyPrimary: document.getElementById("emptyPrimary"),
+      recordHint: document.getElementById("recordHint"),
+      rosterEmpty: document.getElementById("rosterEmpty"),
+      progressEmpty: document.getElementById("progressEmpty"),
+      unitEmpty: document.getElementById("unitEmpty"),
+      addStudentBtn: document.getElementById("addStudentBtn"),
+      addStudentForm: document.getElementById("addStudentForm"),
+      newStudentName: document.getElementById("newStudentName"),
+      cancelAddStudent: document.getElementById("cancelAddStudent"),
+      renameStudentBtn: document.getElementById("renameStudentBtn"),
+      deleteStudentBtn: document.getElementById("deleteStudentBtn"),
+      renameStudentForm: document.getElementById("renameStudentForm"),
+      renameStudentInput: document.getElementById("renameStudentInput"),
+      cancelRenameStudent: document.getElementById("cancelRenameStudent"),
+      addUnitBtn: document.getElementById("addUnitBtn"),
+      manageUnitsBtn: document.getElementById("manageUnitsBtn"),
+      addUnitForm: document.getElementById("addUnitForm"),
+      newUnitName: document.getElementById("newUnitName"),
+      cancelAddUnit: document.getElementById("cancelAddUnit"),
+      exportJson: document.getElementById("exportJson"),
+      importJson: document.getElementById("importJson"),
+      importFile: document.getElementById("importFile"),
+      backupStatus: document.getElementById("backupStatus")
     };
 
     function todayKey(date) {
@@ -1527,73 +1793,170 @@
       return d.getFullYear() + "-" + m + "-" + dayOfMonth;
     }
 
-    function readState() {
-      if (!storageOK) return false;
-      try {
-        var raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return false;
-        var parsed = JSON.parse(raw);
-        if (!parsed || parsed.v !== 1) return false;
-
-        if (parsed.progress && typeof parsed.progress === "object") {
-          students.forEach(function (s) {
-            var src = parsed.progress[s.id];
-            if (!src || typeof src !== "object") return;
-            var clean = {};
-            units.forEach(function (u) {
-              if (src[u.id] === "done" || src[u.id] === "progress") {
-                clean[u.id] = src[u.id];
-              }
-            });
-            if (Object.keys(clean).length) state.progress[s.id] = clean;
-          });
-        }
-
-        if (parsed.days && typeof parsed.days === "object") {
-          Object.keys(parsed.days).forEach(function (key) {
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return;
-            var srcDay = parsed.days[key];
-            if (!srcDay || typeof srcDay !== "object") return;
-            var cleanDay = {};
-            students.forEach(function (s) {
-              var entry = srcDay[s.id];
-              if (!entry || typeof entry !== "object") return;
-              var unitId = String(entry.unit);
-              if (!unitById.has(unitId)) return;
-              if (["todo", "progress", "done"].indexOf(entry.status) === -1) return;
-              cleanDay[s.id] = {
-                unit: unitId,
-                status: entry.status,
-                at: Number(entry.at) || 0
-              };
-            });
-            if (Object.keys(cleanDay).length) state.days[key] = cleanDay;
-          });
-        }
-
-        return true;
-      } catch (err) {
-        return false;
-      }
+    function cleanProgress(raw, studentIds, unitIds) {
+      var out = {};
+      if (!raw || typeof raw !== "object") return out;
+      Object.keys(raw).forEach(function (sid) {
+        if (!studentIds.has(String(sid))) return;
+        var src = raw[sid];
+        if (!src || typeof src !== "object") return;
+        var clean = {};
+        unitIds.forEach(function (uid) {
+          if (src[uid] === "done" || src[uid] === "progress") clean[uid] = src[uid];
+        });
+        if (Object.keys(clean).length) out[String(sid)] = clean;
+      });
+      return out;
     }
 
-    function seedProgress() {
-      students.forEach(function (s) {
-        var p = {};
-        units.forEach(function (u) {
-          if (s.units[u.id] === "done" || s.units[u.id] === "progress") {
-            p[u.id] = s.units[u.id];
+    function cleanDays(raw, studentIds, unitIds) {
+      var out = {};
+      if (!raw || typeof raw !== "object") return out;
+      Object.keys(raw).forEach(function (key) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return;
+        var srcDay = raw[key];
+        if (!srcDay || typeof srcDay !== "object") return;
+        var cleanDay = {};
+        Object.keys(srcDay).forEach(function (sid) {
+          if (!studentIds.has(String(sid))) return;
+          var entry = srcDay[sid];
+          if (!entry || typeof entry !== "object") return;
+          var unitId = String(entry.unit);
+          if (!unitIds.has(unitId)) return;
+          if (["todo", "progress", "done"].indexOf(entry.status) === -1) return;
+          cleanDay[String(sid)] = {
+            unit: unitId,
+            status: entry.status,
+            at: Number(entry.at) || 0
+          };
+        });
+        if (Object.keys(cleanDay).length) out[key] = cleanDay;
+      });
+      return out;
+    }
+
+    function sanitizeLists(rawStudents, rawUnits) {
+      var seenS = {};
+      var seenU = {};
+      var cleanStudents = [];
+      (Array.isArray(rawStudents) ? rawStudents : []).forEach(function (s) {
+        if (!s || typeof s !== "object") return;
+        var id = (s.id === undefined || s.id === null) ? "" : String(s.id);
+        var name = typeof s.name === "string" ? s.name.trim().slice(0, 80) : "";
+        if (!id || !name || seenS[id]) return;
+        seenS[id] = true;
+        cleanStudents.push({ id: id, name: name });
+      });
+      var cleanUnits = [];
+      (Array.isArray(rawUnits) ? rawUnits : []).forEach(function (u) {
+        if (!u || typeof u !== "object") return;
+        var id = (u.id === undefined || u.id === null) ? "" : String(u.id);
+        var label = typeof u.label === "string" ? u.label.trim().slice(0, 80) : "";
+        if (!id || !label || seenU[id]) return;
+        seenU[id] = true;
+        cleanUnits.push({ id: id, label: label });
+      });
+      return { students: cleanStudents, units: cleanUnits };
+    }
+
+    function migrateLegacy(legacy) {
+      // The old version stored only progress and days; names lived in the
+      // old seed file, so they cannot be recovered. Keep the statuses and
+      // use the saved ids as labels; the user can rename them in the app.
+      var studentIds = [];
+      var unitIds = [];
+      function addId(list, id) {
+        id = String(id);
+        if (id && list.indexOf(id) === -1) list.push(id);
+      }
+      if (legacy.progress && typeof legacy.progress === "object") {
+        Object.keys(legacy.progress).forEach(function (sid) {
+          addId(studentIds, sid);
+          var src = legacy.progress[sid];
+          if (src && typeof src === "object") {
+            Object.keys(src).forEach(function (uid) { addId(unitIds, uid); });
           }
         });
-        if (Object.keys(p).length) state.progress[s.id] = p;
+      }
+      if (legacy.days && typeof legacy.days === "object") {
+        Object.keys(legacy.days).forEach(function (key) {
+          var d = legacy.days[key];
+          if (!d || typeof d !== "object") return;
+          Object.keys(d).forEach(function (sid) {
+            addId(studentIds, sid);
+            if (d[sid] && d[sid].unit) addId(unitIds, d[sid].unit);
+          });
+        });
+      }
+      studentIds.sort(function (a, b) {
+        var na = Number(a);
+        var nb = Number(b);
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return a < b ? -1 : 1;
       });
+      var migStudents = studentIds.map(function (id) { return { id: id, name: id }; });
+      var migUnits = unitIds.map(function (id) { return { id: id, label: id }; });
+      var sIds = new Set(migStudents.map(function (s) { return s.id; }));
+      var uIds = new Set(migUnits.map(function (u) { return u.id; }));
+      return {
+        students: migStudents,
+        units: migUnits,
+        progress: cleanProgress(legacy.progress, sIds, uIds),
+        days: cleanDays(legacy.days, sIds, uIds)
+      };
+    }
+
+    function loadData() {
+      var parsed = null;
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) parsed = JSON.parse(raw);
+      } catch (err) {
+        parsed = null;
+      }
+      if (parsed && parsed.v === 2 &&
+          Array.isArray(parsed.students) && Array.isArray(parsed.units)) {
+        var lists = sanitizeLists(parsed.students, parsed.units);
+        students = lists.students;
+        units = lists.units;
+        rebuildIndexes();
+        var sIds = new Set(students.map(function (s) { return s.id; }));
+        var uIds = new Set(units.map(function (u) { return u.id; }));
+        state.progress = cleanProgress(parsed.progress, sIds, uIds);
+        state.days = cleanDays(parsed.days, sIds, uIds);
+        return;
+      }
+      // No v2 data: try the old v1 snapshot once, then start empty.
+      try {
+        var legacyRaw = localStorage.getItem(LEGACY_KEY);
+        if (legacyRaw) {
+          var legacy = JSON.parse(legacyRaw);
+          if (legacy && typeof legacy === "object") {
+            var mig = migrateLegacy(legacy);
+            if (mig.students.length || mig.units.length) {
+              students = mig.students;
+              units = mig.units;
+              rebuildIndexes();
+              state.progress = mig.progress;
+              state.days = mig.days;
+              migrated = true;
+            }
+          }
+        }
+      } catch (err) {
+        // Corrupt old data: fall through to an empty start.
+      }
+      try { localStorage.removeItem(LEGACY_KEY); } catch (err) {}
+      rebuildIndexes();
     }
 
     function save() {
       if (!storageOK) return;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          v: 1,
+          v: 2,
+          students: students,
+          units: units,
           progress: state.progress,
           days: state.days
         }));
@@ -1736,7 +2099,7 @@
       students.forEach(function (s) {
         if (!nextUnit(s.id) && !entryFor(s.id)) finished++;
       });
-      if (finished > 0) {
+      if (finished > 0 && units.length > 0) {
         els.summaryFoot.hidden = false;
         els.summaryFoot.textContent = finished + (finished === 1 ? " student has" : " students have") +
           " finished all " + units.length + " units.";
@@ -1866,6 +2229,10 @@
         tag.textContent = entry ? "Today" : "Next up";
         unitEl.textContent = unit.label;
         unitEl.title = unit.label;
+      } else if (!units.length) {
+        tag.textContent = "No units";
+        unitEl.textContent = "No units yet";
+        unitEl.title = unitEl.textContent;
       } else {
         tag.textContent = "Complete";
         unitEl.textContent = "All " + units.length + " units done";
@@ -1946,6 +2313,7 @@
 
     function buildStudents() {
       els.studentList.textContent = "";
+      cardById.clear();
       students.forEach(function (student) {
         var li = document.createElement("li");
         li.className = "student";
@@ -2004,7 +2372,7 @@
       var counts = unitCountsFor(student.id);
       var next = nextUnit(student.id);
       row.count.textContent = counts.done + "/" + units.length;
-      row.next.textContent = next ? "Next: " + next.label : "All " + units.length + " units done";
+      row.next.textContent = next ? "Next: " + next.label : (units.length ? "All " + units.length + " units done" : "No units yet");
       row.meter.style.width = (units.length ? (counts.done / units.length) * 100 : 0) + "%";
     }
 
@@ -2094,7 +2462,7 @@
       els.unitCount.textContent = String(units.length);
       var entry = entryFor(student.id);
 
-      units.forEach(function (unit) {
+      units.forEach(function (unit, index) {
         var li = document.createElement("li");
         li.className = "unit-item";
         li.dataset.unit = unit.id;
@@ -2115,10 +2483,26 @@
         }
 
         var choices = createChoices("Set " + unit.label + " status for " + student.name);
-        li.append(top, choices);
+        var manage = document.createElement("div");
+        manage.className = "unit-manage";
+        [["rename", "Rename"], ["up", "↑ Move up"], ["down", "↓ Move down"], ["delete", "Delete"]].forEach(function (pair) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "manage-btn" + (pair[0] === "delete" ? " danger" : "");
+          b.dataset.unitAction = pair[0];
+          b.dataset.unit = unit.id;
+          b.textContent = pair[1];
+          b.setAttribute("aria-label", pair[1] + " " + unit.label);
+          if (pair[0] === "up" && index === 0) b.disabled = true;
+          if (pair[0] === "down" && index === units.length - 1) b.disabled = true;
+          manage.append(b);
+        });
+        li.append(top, choices, manage);
         setUnitRowState(li, unitStatusFor(student.id, unit.id));
         els.unitList.append(li);
       });
+      els.unitEmpty.hidden = units.length > 0;
+      updateManageUnitsBtn();
     }
 
 
@@ -2237,6 +2621,7 @@
       options = options || {};
       var previousId = selectedStudentId;
       selectedStudentId = null;
+      hideForm(els.addStudentForm, els.newStudentName);
 
       els.todayView.hidden = true;
       els.progressView.hidden = true;
@@ -2276,6 +2661,9 @@
 
       setActiveTab("students");
       document.title = student.name + " · Daily Recitation";
+      managingUnits = false;
+      hideForm(els.renameStudentForm, els.renameStudentInput);
+      hideForm(els.addUnitForm, els.newUnitName);
       renderDetailHeader(student);
       buildUnitList(student);
       window.scrollTo(0, 0);
@@ -2347,6 +2735,340 @@
       }
     }
 
+
+    function isDuplicateStudentName(name, exceptId) {
+      var lower = name.toLowerCase();
+      return students.some(function (s) {
+        return s.id !== exceptId && s.name.toLowerCase() === lower;
+      });
+    }
+
+    function isDuplicateUnitLabel(label, exceptId) {
+      var lower = label.toLowerCase();
+      return units.some(function (u) {
+        return u.id !== exceptId && u.label.toLowerCase() === lower;
+      });
+    }
+
+    function showForm(form, input) {
+      form.hidden = false;
+      if (input) input.focus();
+    }
+
+    function hideForm(form, input) {
+      form.hidden = true;
+      if (input) input.value = "";
+    }
+
+    function openAddStudent() {
+      showStudentsRoot();
+      showForm(els.addStudentForm, els.newStudentName);
+    }
+
+    function openAddUnit() {
+      if (!students.length) {
+        els.live.textContent = "Add a student first.";
+        openAddStudent();
+        return;
+      }
+      if (!selectedStudentId) openStudent(students[0].id);
+      showForm(els.addUnitForm, els.newUnitName);
+    }
+
+    function addStudent(name) {
+      var student = { id: newId("s"), name: name };
+      students.push(student);
+      save();
+      refreshAll();
+      els.live.textContent = "Student " + name + " added.";
+      return student;
+    }
+
+    function renameStudent(name) {
+      var student = studentById.get(selectedStudentId);
+      if (!student) return;
+      student.name = name;
+      save();
+      refreshAll();
+      els.live.textContent = "Student renamed to " + name + ".";
+    }
+
+    function deleteStudent() {
+      var student = studentById.get(selectedStudentId);
+      if (!student) return;
+      var counts = unitCountsFor(student.id);
+      if (!window.confirm("Delete student \"" + student.name + "\"? Their " +
+          counts.done + " done and " + counts.progress +
+          " in-progress units, and today\u2019s record, will also be deleted. " +
+          "This cannot be undone.")) return;
+      students = students.filter(function (s) { return s.id !== student.id; });
+      delete state.progress[student.id];
+      Object.keys(state.days).forEach(function (key) {
+        var d = state.days[key];
+        if (d) {
+          delete d[student.id];
+          if (!Object.keys(d).length) delete state.days[key];
+        }
+      });
+      selectedStudentId = null;
+      save();
+      refreshAll();
+      showStudentsRoot();
+      els.live.textContent = "Student " + student.name + " deleted.";
+    }
+
+    function addUnit(label) {
+      var unit = { id: newId("u"), label: label };
+      units.push(unit);
+      save();
+      refreshAll();
+      els.live.textContent = "Unit " + label + " added.";
+      return unit;
+    }
+
+    function moveUnit(unitId, dir) {
+      var i = units.findIndex(function (u) { return u.id === unitId; });
+      var j = i + dir;
+      if (i < 0 || j < 0 || j >= units.length) return;
+      var tmp = units[i];
+      units[i] = units[j];
+      units[j] = tmp;
+      var action = dir < 0 ? "up" : "down";
+      save();
+      refreshAll();
+      var btn = els.unitList.querySelector(
+        '[data-unit="' + unitId + '"][data-unit-action="' + action + '"]');
+      if (btn) btn.focus({ preventScroll: true });
+    }
+
+    function deleteUnit(unitId) {
+      var unit = unitById.get(unitId);
+      if (!unit) return;
+      var used = 0;
+      students.forEach(function (s) {
+        if (unitStatusFor(s.id, unitId) !== "todo") used++;
+      });
+      if (!window.confirm("Delete unit \"" + unit.label + "\"? Status for this unit will be removed for " +
+          used + (used === 1 ? " student" : " students") + ". This cannot be undone.")) return;
+      units = units.filter(function (u) { return u.id !== unitId; });
+      students.forEach(function (s) {
+        var p = state.progress[s.id];
+        if (p) {
+          delete p[unitId];
+          if (!Object.keys(p).length) delete state.progress[s.id];
+        }
+      });
+      Object.keys(state.days).forEach(function (key) {
+        var d = state.days[key];
+        Object.keys(d).forEach(function (sid) {
+          if (d[sid] && d[sid].unit === unitId) delete d[sid];
+        });
+        if (!Object.keys(d).length) delete state.days[key];
+      });
+      save();
+      refreshAll();
+      els.live.textContent = "Unit " + unit.label + " deleted.";
+    }
+
+    function startUnitRename(unitId) {
+      var unit = unitById.get(unitId);
+      var li = els.unitList.querySelector('[data-unit="' + unitId + '"]');
+      if (!unit || !li) return;
+      var label = li.querySelector(".unit-name");
+      if (!label || li.querySelector(".rename-input")) return;
+      var input = document.createElement("input");
+      input.type = "text";
+      input.className = "rename-input";
+      input.value = unit.label;
+      input.maxLength = 80;
+      input.setAttribute("aria-label", "Rename " + unit.label);
+      label.hidden = true;
+      label.parentNode.insertBefore(input, label.nextSibling);
+      input.focus();
+      input.select();
+      var done = false;
+      function finish(commit) {
+        if (done) return;
+        done = true;
+        var value = input.value.trim();
+        input.remove();
+        label.hidden = false;
+        if (commit && value && value !== unit.label) {
+          if (isDuplicateUnitLabel(value, unitId)) {
+            els.live.textContent = "That unit name is already used.";
+            return;
+          }
+          unit.label = value;
+          save();
+          refreshAll();
+          els.live.textContent = "Unit renamed to " + value + ".";
+        }
+      }
+      input.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter") { ev.preventDefault(); finish(true); }
+        else if (ev.key === "Escape") { ev.preventDefault(); finish(false); }
+      });
+      input.addEventListener("blur", function () { finish(true); });
+    }
+
+    function updateManageUnitsBtn() {
+      els.manageUnitsBtn.textContent = managingUnits ? "Done" : "Manage units";
+      els.manageUnitsBtn.setAttribute("aria-pressed", managingUnits ? "true" : "false");
+      els.unitList.classList.toggle("managing", managingUnits);
+    }
+
+    function toggleManageUnits() {
+      managingUnits = !managingUnits;
+      updateManageUnitsBtn();
+      els.live.textContent = managingUnits ?
+        "Managing units. Rename, move, or delete a unit." : "Done managing units.";
+    }
+
+    function renderEmptyStates() {
+      els.recordHint.hidden = students.length === 0;
+      els.rosterEmpty.hidden = students.length > 0;
+      els.progressEmpty.hidden = students.length > 0;
+      if (students.length === 0) {
+        els.todayEmpty.hidden = false;
+        els.todayEmptyTitle.textContent = "No students yet";
+        els.todayEmptyText.textContent = "Add your first student to start recording daily recitation.";
+        els.emptyPrimary.textContent = "Add student";
+        emptyPrimaryAction = "student";
+      } else if (units.length === 0) {
+        els.todayEmpty.hidden = false;
+        els.todayEmptyTitle.textContent = "No units yet";
+        els.todayEmptyText.textContent = "Add your first recitation unit, for example a surah or a page.";
+        els.emptyPrimary.textContent = "Add unit";
+        emptyPrimaryAction = "unit";
+      } else {
+        els.todayEmpty.hidden = true;
+        emptyPrimaryAction = null;
+      }
+    }
+
+    function refreshAll() {
+      rebuildIndexes();
+      buildStudents();
+      buildRoster();
+      buildProgressList();
+      updateAllCards();
+      renderSummary();
+      renderWeekChart();
+      renderStudentsMeta();
+      renderProgress();
+      renderEmptyStates();
+      els.unitCount.textContent = String(units.length);
+      if (selectedStudentId) {
+        var student = studentById.get(selectedStudentId);
+        if (student) {
+          renderDetailHeader(student);
+          buildUnitList(student);
+        } else {
+          selectedStudentId = null;
+        }
+      }
+    }
+
+    function setBackupStatus(message, isError) {
+      els.backupStatus.textContent = message;
+      els.backupStatus.classList.toggle("is-error", !!isError);
+    }
+
+    function exportJson() {
+      var data = {
+        app: "Daily Recitation",
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        students: students,
+        units: units,
+        progress: state.progress,
+        days: state.days
+      };
+      var text = JSON.stringify(data, null, 2);
+      var blob = new Blob([text], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "daily-recitation-backup-" + todayKey() + ".json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      setBackupStatus("Backup downloaded: " + a.download + ".", false);
+      els.live.textContent = "Backup downloaded.";
+    }
+
+    function parseImport(text) {
+      var parsed = JSON.parse(text);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new Error("not an object");
+      }
+      if (!Array.isArray(parsed.students) || !Array.isArray(parsed.units)) {
+        throw new Error("missing students or units");
+      }
+      var foldedProgress = {};
+      parsed.students.forEach(function (s) {
+        if (s && typeof s === "object" && s.units && typeof s.units === "object") {
+          foldedProgress[String(s.id)] = s.units;
+        }
+      });
+      var lists = sanitizeLists(parsed.students, parsed.units);
+      var sIds = new Set(lists.students.map(function (s) { return s.id; }));
+      var uIds = new Set(lists.units.map(function (u) { return u.id; }));
+      var mergedProgress = {};
+      Object.keys(foldedProgress).forEach(function (k) { mergedProgress[k] = foldedProgress[k]; });
+      if (parsed.progress && typeof parsed.progress === "object") {
+        Object.keys(parsed.progress).forEach(function (k) { mergedProgress[k] = parsed.progress[k]; });
+      }
+      return {
+        students: lists.students,
+        units: lists.units,
+        progress: cleanProgress(mergedProgress, sIds, uIds),
+        days: cleanDays(parsed.days, sIds, uIds)
+      };
+    }
+
+    function handleImportFile(ev) {
+      var file = ev.target.files && ev.target.files[0];
+      ev.target.value = "";
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var data;
+        try {
+          data = parseImport(String(reader.result));
+        } catch (err) {
+          setBackupStatus("That file could not be imported. Check it is a Daily Recitation JSON backup.", true);
+          els.live.textContent = "Import failed. The file is not a valid backup.";
+          return;
+        }
+        var message = "Import this backup? It will replace all current data (" +
+          students.length + (students.length === 1 ? " student" : " students") + ", " +
+          units.length + (units.length === 1 ? " unit" : " units") + ") with " +
+          data.students.length + (data.students.length === 1 ? " student" : " students") +
+          " and " + data.units.length + (data.units.length === 1 ? " unit" : " units") +
+          " from the file. This cannot be undone.";
+        if (!window.confirm(message)) {
+          setBackupStatus("Import cancelled. Your current data was not changed.", false);
+          return;
+        }
+        students = data.students;
+        units = data.units;
+        state.progress = data.progress;
+        state.days = data.days;
+        selectedStudentId = null;
+        managingUnits = false;
+        save();
+        refreshAll();
+        setBackupStatus("Backup imported: " + data.students.length + " students, " +
+          data.units.length + " units.", false);
+        els.live.textContent = "Backup imported.";
+      };
+      reader.onerror = function () {
+        setBackupStatus("That file could not be read. Try again.", true);
+      };
+      reader.readAsText(file);
+    }
 
     function buildCsv() {
       function quote(value) {
@@ -2486,14 +3208,9 @@
 
       if (!storageOK) els.storageWarning.hidden = false;
 
-      if (readState()) {
-        // Re-save immediately so entries for retired units (AL-FIIL, the old
-        // Al BAYNIYYAH / AL ALAQ ids, and any other removed unit) are purged
-        // from localStorage instead of lingering in the saved snapshot.
-        save();
-      } else {
-        seedProgress();
-      }
+      loadData();
+      if (migrated) els.migrationNotice.hidden = false;
+      save();
 
       els.classTotal.textContent = String(totalUnits);
       els.unitCount.textContent = String(units.length);
@@ -2506,6 +3223,7 @@
       renderWeekChart();
       renderStudentsMeta();
       renderProgress();
+      renderEmptyStates();
       setActiveTab("today");
 
       els.studentList.addEventListener("click", function (ev) {
@@ -2557,6 +3275,106 @@
       });
 
       els.copyCsv.addEventListener("click", copyCsvToClipboard);
+      els.addStudentBtn.addEventListener("click", function () {
+        showForm(els.addStudentForm, els.newStudentName);
+      });
+      els.cancelAddStudent.addEventListener("click", function () {
+        hideForm(els.addStudentForm, els.newStudentName);
+        els.addStudentBtn.focus();
+      });
+      els.addStudentForm.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var name = els.newStudentName.value.trim();
+        if (!name) {
+          els.live.textContent = "Enter a student name.";
+          els.newStudentName.focus();
+          return;
+        }
+        if (isDuplicateStudentName(name, null)) {
+          els.live.textContent = "That student name is already used.";
+          els.newStudentName.focus();
+          els.newStudentName.select();
+          return;
+        }
+        addStudent(name);
+        hideForm(els.addStudentForm, els.newStudentName);
+        els.addStudentBtn.focus();
+      });
+      els.emptyPrimary.addEventListener("click", function () {
+        if (emptyPrimaryAction === "unit") openAddUnit(); else openAddStudent();
+      });
+      els.renameStudentBtn.addEventListener("click", function () {
+        var student = studentById.get(selectedStudentId);
+        if (!student) return;
+        els.renameStudentInput.value = student.name;
+        showForm(els.renameStudentForm, els.renameStudentInput);
+        els.renameStudentInput.select();
+      });
+      els.cancelRenameStudent.addEventListener("click", function () {
+        hideForm(els.renameStudentForm, els.renameStudentInput);
+        els.renameStudentBtn.focus();
+      });
+      els.renameStudentForm.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var name = els.renameStudentInput.value.trim();
+        if (!name) {
+          els.live.textContent = "Enter a student name.";
+          els.renameStudentInput.focus();
+          return;
+        }
+        if (isDuplicateStudentName(name, selectedStudentId)) {
+          els.live.textContent = "That student name is already used.";
+          els.renameStudentInput.focus();
+          els.renameStudentInput.select();
+          return;
+        }
+        renameStudent(name);
+        hideForm(els.renameStudentForm, els.renameStudentInput);
+        els.renameStudentBtn.focus();
+      });
+      els.deleteStudentBtn.addEventListener("click", deleteStudent);
+      els.addUnitBtn.addEventListener("click", function () {
+        showForm(els.addUnitForm, els.newUnitName);
+      });
+      els.cancelAddUnit.addEventListener("click", function () {
+        hideForm(els.addUnitForm, els.newUnitName);
+        els.addUnitBtn.focus();
+      });
+      els.addUnitForm.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var label = els.newUnitName.value.trim();
+        if (!label) {
+          els.live.textContent = "Enter a unit name.";
+          els.newUnitName.focus();
+          return;
+        }
+        if (isDuplicateUnitLabel(label, null)) {
+          els.live.textContent = "That unit name is already used.";
+          els.newUnitName.focus();
+          els.newUnitName.select();
+          return;
+        }
+        addUnit(label);
+        hideForm(els.addUnitForm, els.newUnitName);
+        els.addUnitBtn.focus();
+      });
+      els.manageUnitsBtn.addEventListener("click", toggleManageUnits);
+      els.unitList.addEventListener("click", function (ev) {
+        var btn = ev.target.closest("[data-unit-action]");
+        if (!btn || btn.disabled) return;
+        var action = btn.dataset.unitAction;
+        var unitId = btn.dataset.unit;
+        if (action === "rename") startUnitRename(unitId);
+        else if (action === "up") moveUnit(unitId, -1);
+        else if (action === "down") moveUnit(unitId, 1);
+        else if (action === "delete") deleteUnit(unitId);
+      });
+      els.exportJson.addEventListener("click", exportJson);
+      els.importJson.addEventListener("click", function () { els.importFile.click(); });
+      els.importFile.addEventListener("change", handleImportFile);
+      els.dismissMigration.addEventListener("click", function () {
+        els.migrationNotice.hidden = true;
+      });
       els.closeCsvSheet.addEventListener("click", closeCsvSheet);
       els.csvBackdrop.addEventListener("click", closeCsvSheet);
 
